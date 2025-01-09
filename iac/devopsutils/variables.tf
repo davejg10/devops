@@ -5,7 +5,6 @@ variable "environment_settings" {
     region_code = string
     environment = string
     app_name    = string
-    identifier  = string
   })
 }
 

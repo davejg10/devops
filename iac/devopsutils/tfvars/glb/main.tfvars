@@ -3,7 +3,6 @@ environment_settings = {
   region_code    = "uks"
   environment    = "glb"
   app_name       = "devopsutils"
-  identifier     = "01"
 }
 
 // Networking

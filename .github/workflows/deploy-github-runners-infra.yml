@@ -1,4 +1,4 @@
-name: deploy-infra-terraform
+name: deploy-github-runners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:

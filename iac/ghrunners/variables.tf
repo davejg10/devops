@@ -17,7 +17,7 @@ variable "project" {
   type    = string
   default = "devops-runners"
 }
-variable "github_app_key_secret_name" {
+variable "github_access_token" {
   type = string
 }
 // The rest are all passed in via cmdline
@@ -29,7 +29,7 @@ variable "github_app_id" {
 variable "github_installation_id" {
   type = string
 }
-variable "github_app_key" {
+variable "github_access_token" {
   type      = string
   sensitive = true
 }

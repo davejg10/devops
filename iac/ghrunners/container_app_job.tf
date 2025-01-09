@@ -12,7 +12,7 @@ resource "azurerm_container_app_job" "github_runners" {
   }
 
   secret {
-    name                = var.github_app_key_secret_name
+    name                = var.github_access_token_secret_name
     identity            = azurerm_user_assigned_identity.container_app_job.id
     key_vault_secret_id = azurerm_key_vault_secret.github_app_key.id
   }
@@ -34,8 +34,8 @@ resource "azurerm_container_app_job" "github_runners" {
         value = var.github_app_id
       }
       env {
-        name        = "APP_PRIVATE_KEY"
-        secret_name = var.github_app_key_secret_name
+        name        = "ACCESS_TOKEN"
+        secret_name = var.github_access_token_secret_name
       }
       env {
         name  = "RUNNER_SCOPE"
@@ -76,7 +76,7 @@ resource "azurerm_container_app_job" "github_runners" {
           "installationID" = var.github_installation_id
         }
         authentication {
-          secret_name       = var.github_app_key_secret_name
+          secret_name       = var.github_access_token_secret_name
           trigger_parameter = "appKey"
         }
       }

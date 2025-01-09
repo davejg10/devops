@@ -48,12 +48,19 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Generate access token
+        id: generate-access-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
       - name: Terraform plan
         run: |
           terraform plan -input=false \
             -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
             -var "github_app_id=${{ vars.GH_APP_ID }}" \
-            -var "github_app_key=${{ secrets.GH_APP_PRIVATE_KEY  }}" \
+            -var "github_acess_token=${{ steps.generate-access-token.outputs.token  }}" \
             -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
             -out ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       

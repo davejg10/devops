@@ -23,7 +23,7 @@ terraform {
 provider "azurerm" {
   use_oidc                        = true
   resource_provider_registrations = "core"
-  subscription_id = "fd1f9c42-234f-4f5a-b49c-04bcfb79351d"
+  subscription_id                 = "fd1f9c42-234f-4f5a-b49c-04bcfb79351d"
 
   resource_providers_to_register = [
     "Microsoft.App",

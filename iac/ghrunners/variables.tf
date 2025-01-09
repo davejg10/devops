@@ -10,11 +10,11 @@ variable "environment_settings" {
 
 // Self-hosted-runners
 variable "github_organization" {
-  type = string
+  type    = string
   default = "davejg10"
 }
 variable "project" {
-  type = string
+  type    = string
   default = "devops-runners"
 }
 variable "github_app_key_secret_name" {
@@ -22,7 +22,7 @@ variable "github_app_key_secret_name" {
 }
 // The rest are all passed in via cmdline
 variable "github_app_id" {
-  type = string
+  type    = string
   default = "test"
 }
 
@@ -30,6 +30,6 @@ variable "github_installation_id" {
   type = string
 }
 variable "github_app_key" {
-  type = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }

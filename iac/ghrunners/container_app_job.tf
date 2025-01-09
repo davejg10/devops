@@ -1,23 +1,24 @@
 resource "azurerm_container_app_job" "github_runners" {
   name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
-  container_app_environment_id = azurerm_container_app_environment.github_runners.id
+
   resource_group_name          = data.azurerm_resource_group.rg.name
-  revision_mode                = "Single"
-  replica_timeout_in_seconds = 1800
+  location                     = var.environment_settings.region
+  container_app_environment_id = azurerm_container_app_environment.github_runners.id
+  replica_timeout_in_seconds   = 1800
 
   identity {
-    type = "UserAssigned"
+    type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.container_app_job.id]
   }
 
   secret {
-    name = var.github_app_key_secret_name
-    identity = azurerm_user_assigned_identity.container_app_job.id
+    name                = var.github_app_key_secret_name
+    identity            = azurerm_user_assigned_identity.container_app_job.id
     key_vault_secret_id = azurerm_key_vault_secret.github_app_key.resource_id
   }
 
   registry {
-    server = data.terraform_remote_state.devopsutils.outputs.acr_login_server
+    server   = data.terraform_remote_state.devopsutils.outputs.acr_login_server
     identity = azurerm_user_assigned_identity.container_app_job.id
   }
 
@@ -29,57 +30,56 @@ resource "azurerm_container_app_job" "github_runners" {
       memory = "0.5Gi"
 
       env {
-        name = "APP_ID"
+        name  = "APP_ID"
         value = var.github_app_id
       }
       env {
-        name = "APP_PRIVATE_KEY"
+        name        = "APP_PRIVATE_KEY"
         secret_name = var.github_app_key_secret_name
       }
       env {
-        name = "RUNNER_SCOPE"
+        name  = "RUNNER_SCOPE"
         value = "org"
       }
       env {
-        name = "ORG_NAME"
+        name  = "ORG_NAME"
         value = var.github_organization
       }
       env {
-        name = "APPSETTING_WEBSITE_SITE_NAME"
+        name  = "APPSETTING_WEBSITE_SITE_NAME"
         value = "az-cli-workaround"
       }
       env {
-        name = "MSI_CLIENT_ID"
+        name  = "MSI_CLIENT_ID"
         value = azurerm_user_assigned_identity.container_app_job.client_id
       }
       env {
-        name = "EPHEMERAL"
+        name  = "EPHEMERAL"
         value = "1"
       }
       env {
-        name = "RUNNER_NAME_PREFIX"
+        name  = "RUNNER_NAME_PREFIX"
         value = var.project
-      }
-    }
-
-    event_trigger_config {
-      scale = {
-        rules = {
-          name = "github-runner-scaling-rule"
-          custom_rule_type = "github-runner"
-          metadata = {
-            "owner" = var.github_organization
-            "runnerScope" = "org"
-            "applicationID" = var.github_app_id
-            "installationID" = var.github_installation_id
-          }
-          authentication =  {
-            secret_name = var.github_app_key_secret_name
-            trigger_parameter = "appKey"
-          }
-        }
       }
     }
   }
 
+  event_trigger_config {
+    scale = {
+      rules = {
+        name             = "github-runner-scaling-rule"
+        custom_rule_type = "github-runner"
+        metadata = {
+          "owner"          = var.github_organization
+          "runnerScope"    = "org"
+          "applicationID"  = var.github_app_id
+          "installationID" = var.github_installation_id
+        }
+        authentication = {
+          secret_name       = var.github_app_key_secret_name
+          trigger_parameter = "appKey"
+        }
+      }
+    }
+  }
 }

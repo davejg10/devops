@@ -6,4 +6,4 @@ environment_settings = {
 }
 
 // Self-hosted-runners
-github_app_key_secret_name = "github-app-key"
+github_access_token_secret_name = "github-app-key"

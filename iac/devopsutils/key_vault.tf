@@ -20,7 +20,7 @@ resource "azurerm_key_vault" "devops" {
 }
 
 resource "azurerm_role_assignment" "github_deployer" {
-  scope                = data.terraform_remote_state.devopsutils.outputs.key_vault_id
+  scope                = azurerm_key_vault.devops.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = data.azurerm_client_config.current.object_id
 }

@@ -11,8 +11,8 @@ on:
           - github-runners
 
 env:
-  ACR_NAME: acrglbuksdevops01
-  ACR_SERVER_NAME: acrglbuksdevops01.azurecr.io
+  ACR_NAME: acrglbuksdevopsutils
+  ACR_SERVER_NAME: acrglbuksdevopsutils.azurecr.io
   TAG: ${{ github.run_number }}
 
 permissions:

@@ -10,3 +10,9 @@ resource "azurerm_container_registry" "devops" {
 output "acr_name" { 
   value = azurerm_container_registry.devops.name
 }
+output "acr_id" {
+  value = azurerm_container_registry.devops.id
+}
+output "acr_login_server" {
+  value = azurerm_container_registry.devops.login_server
+}

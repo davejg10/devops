@@ -1,5 +1,5 @@
 resource "azurerm_container_app" "github_runners" {
-  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-${var.environment_settings.identifier}"
+  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
   container_app_environment_id = azurerm_container_app_environment.github_runners.id
   resource_group_name          = data.azurerm_resource_group.rg.name
   revision_mode                = "Single"
@@ -16,14 +16,14 @@ resource "azurerm_container_app" "github_runners" {
   }
 
   registry {
-    server = azurerm_container_registry.devops.login_server
+    server = data.terraform_remote_state.devopsutils.outputs.acr_login_server
     identity = azurerm_user_assigned_identity.container_app_job.id
   }
 
   template {
     container {
       name   = "github-runner"
-      image  = "${azurerm_container_registry.devops.login_server}/self-hosted-runners:latest"
+      image  = "${data.terraform_remote_state.devopsutils.outputs.acr_login_server}/self-hosted-runners:latest"
       cpu    = 0.25
       memory = "0.5Gi"
 

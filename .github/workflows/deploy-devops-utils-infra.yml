@@ -49,10 +49,19 @@ jobs:
         run: terraform validate
 
       - name: Terraform plan
+        id: terraform_plan
         run: |
           terraform plan -input=false \
             -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
             -out ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
+      
+      - name: Update GitHub variables
+        run: |
+          gh variable set DEVOPSUTILS_ACR_NAME --body ${{ steps.terraform_plan.outputs.acr_name }}
+          gh variable set DEVOPSUTILS_KEY_VAULT_NAME --body ${{ steps.terraform_plan.outputs.key_vault_name }}
+          gh variable set DEVOPSUTILS_LOG_ANALYTICS_WORKSPACE_NAME --body ${{ steps.terraform_plan.outputs.log_analytics_workspace_name }}
+          gh variable set DEVOPSUTILS_RESOURCE_GROUP_NAME --body ${{ steps.terraform_plan.outputs.resource_group_name }}
+          gh variable set DEVOPSUTILS_VNET_NAME --body ${{ steps.terraform_plan.outputs.vnet_name }}
       
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4

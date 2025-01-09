@@ -20,7 +20,7 @@ env:
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac
+ work_dir: ./iac/${{ github.event.inputs.app_name }}
 
 permissions:
   id-token: write

@@ -1,9 +1,6 @@
 resource "azurerm_key_vault" "devops" {
   name = "kv-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
-
-kv-glb-uks-devopsutils
-kv-glb-uks-ghrunners
-
+  
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.environment_settings.region
   tenant_id           = data.azurerm_client_config.current.tenant_id

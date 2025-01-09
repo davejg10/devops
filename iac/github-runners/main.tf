@@ -1,7 +1,7 @@
 terraform {
   backend "azurerm" {
     use_oidc = true
-    key      = "devops.tfstate"
+    key      = "github-runner.tfstate"
   }
 }
 
@@ -25,7 +25,6 @@ provider "azurerm" {
   subscription_id = "fd1f9c42-234f-4f5a-b49c-04bcfb79351d"
 
   resource_providers_to_register = [
-    # "Microsoft.ContainerService",
     "Microsoft.App",
   ]
 

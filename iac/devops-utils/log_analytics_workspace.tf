@@ -7,3 +7,7 @@ resource "azurerm_log_analytics_workspace" "devops" {
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
+
+output "log_analytics_workspace_name" {
+  value = azurerm_log_analytics_workspace.devops.name
+}

@@ -6,3 +6,7 @@ resource "azurerm_container_registry" "devops" {
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
 }
+
+output "acr_name" { 
+  value = azurerm_container_registry.devops.name
+}

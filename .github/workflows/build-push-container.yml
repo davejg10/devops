@@ -8,7 +8,7 @@ on:
         type: choice
         description: Dockerfile dir
         options: 
-          - self-hosted-runners
+          - github-runners
 
 env:
   ACR_NAME: acrglbuksdevops01

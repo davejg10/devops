@@ -17,7 +17,7 @@ variable "project" {
   type    = string
   default = "devops-runners"
 }
-variable "github_access_token" {
+variable "github_access_token_secret_name" {
   type = string
 }
 // The rest are all passed in via cmdline

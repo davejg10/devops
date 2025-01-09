@@ -40,6 +40,8 @@ jobs:
 
       - name: Docker build
         run: docker build -t ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} --build-arg build_version=${{ env.TAG }} .
-
+  
       - name: Docker push
-        run: docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}
+        run: |
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:latest

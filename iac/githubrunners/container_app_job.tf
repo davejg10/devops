@@ -1,8 +1,9 @@
-resource "azurerm_container_app" "github_runners" {
+resource "azurerm_container_app_job" "github_runners" {
   name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
   container_app_environment_id = azurerm_container_app_environment.github_runners.id
   resource_group_name          = data.azurerm_resource_group.rg.name
   revision_mode                = "Single"
+  replica_timeout_in_seconds = 1800
 
   identity {
     type = "UserAssigned"
@@ -61,18 +62,22 @@ resource "azurerm_container_app" "github_runners" {
       }
     }
 
-    custom_scale_rule {
-      name = "github-runner-scaling-rule"
-      custom_rule_type = "github-runner"
-      metadata = {
-        "owner" = var.github_organization
-        "runnerScope" = "org"
-        "applicationID" = var.github_app_id
-        "installationID" = var.github_installation_id
-      }
-      authentication {
-        secret_name = var.github_app_key_secret_name
-        trigger_parameter = "appKey"
+    event_trigger_config {
+      scale = {
+        rules = {
+          name = "github-runner-scaling-rule"
+          custom_rule_type = "github-runner"
+          metadata = {
+            "owner" = var.github_organization
+            "runnerScope" = "org"
+            "applicationID" = var.github_app_id
+            "installationID" = var.github_installation_id
+          }
+          authentication {
+            secret_name = var.github_app_key_secret_name
+            trigger_parameter = "appKey"
+          }
+        }
       }
     }
   }

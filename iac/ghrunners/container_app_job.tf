@@ -65,8 +65,8 @@ resource "azurerm_container_app_job" "github_runners" {
   }
 
   event_trigger_config {
-    scale = {
-      rules = {
+    scale {
+      rules {
         name             = "github-runner-scaling-rule"
         custom_rule_type = "github-runner"
         metadata = {
@@ -75,7 +75,7 @@ resource "azurerm_container_app_job" "github_runners" {
           "applicationID"  = var.github_app_id
           "installationID" = var.github_installation_id
         }
-        authentication = {
+        authentication {
           secret_name       = var.github_app_key_secret_name
           trigger_parameter = "appKey"
         }

@@ -1,19 +1,8 @@
-name: deploy-infra-terraform
+name: deploy-devops-utils-infra
 run-name: Terraform deploy ${{ env.APP_NAME }} in ${{ env.ENVIRONMENT }}
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        type: choice
-        description: Environment
-        options: 
-          - glb
-      app_name:
-        type: choice
-        description: Application name
-        options: 
-          - devops-utils
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}

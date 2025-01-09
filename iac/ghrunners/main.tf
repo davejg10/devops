@@ -1,3 +1,4 @@
+# https://blog.xmi.fr/posts/github-runner-container-app-part1/
 terraform {
   backend "azurerm" {
     use_oidc = true

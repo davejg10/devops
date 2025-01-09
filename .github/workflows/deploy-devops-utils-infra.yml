@@ -20,7 +20,7 @@ env:
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac
+ work_dir: ./iac/${{ github.event.inputs.app_name }}
 
 permissions:
   id-token: write
@@ -32,7 +32,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}/${{ github.event.inputs.app_name }}
+        working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
 
@@ -66,7 +66,7 @@ jobs:
     needs: terraform_plan
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}/${{ github.event.inputs.app_name }}
+        working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
 

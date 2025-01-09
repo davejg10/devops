@@ -1,4 +1,4 @@
-name: deploy-github-runners-infra
+name: deploy-githubrunners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
@@ -13,7 +13,7 @@ on:
         type: choice
         description: Application name
         options: 
-          - devops
+          - githubrunners
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}

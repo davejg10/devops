@@ -14,7 +14,7 @@ resource "azurerm_container_app_job" "github_runners" {
   secret {
     name                = var.github_app_key_secret_name
     identity            = azurerm_user_assigned_identity.container_app_job.id
-    key_vault_secret_id = azurerm_key_vault_secret.github_app_key.resource_id
+    key_vault_secret_id = azurerm_key_vault_secret.github_app_key.id
   }
 
   registry {

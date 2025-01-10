@@ -29,13 +29,17 @@ resource "azurerm_container_app_job" "github_runners" {
       cpu    = 0.25
       memory = "0.5Gi"
 
-      # env {
-      #   name  = "APP_ID"
-      #   value = var.github_app_id
-      # }
       env {
-        name        = "ACCESS_TOKEN"
-        secret_name = var.github_access_token_secret_name
+        name  = "APP_ID"
+        value = var.github_app_id
+      }
+      env {
+        name  = "APP_LOGIN"
+        value = var.github_app_login
+      }
+      env {
+        name        = "APP_PRIVATE_KEY"
+        secret_name = var.github_app_key_secret_name
       }
       env {
         name  = "RUNNER_SCOPE"
@@ -82,8 +86,8 @@ resource "azurerm_container_app_job" "github_runners" {
 
         }
         authentication {
-          secret_name       = var.github_access_token_secret_name
-          trigger_parameter = "personalAccessToken"
+          secret_name       = var.github_app_key_secret_name
+          trigger_parameter = "appKey"
         }
       }
     }

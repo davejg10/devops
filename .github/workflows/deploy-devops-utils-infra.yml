@@ -28,15 +28,13 @@ permissions:
 
 jobs:
   terraform_plan:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
 
       - name: Terraform init
         run: |

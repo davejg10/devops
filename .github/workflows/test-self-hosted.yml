@@ -8,7 +8,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
+
       - run: |
-          yq
-          docker
+          az login --identity -u $MSI_CLIENT_ID
+          
         name: Execute az cli sample commands

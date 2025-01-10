@@ -39,15 +39,19 @@ resource "azurerm_container_app_job" "github_runners" {
       }
       env {
         name  = "RUNNER_SCOPE"
-        value = "org"
+        value = "repo"
       }
-      env {
-        name  = "ORG_NAME"
-        value = var.github_organization
-      }
+      # env {
+      #   name  = "ORG_NAME"
+      #   value = var.github_organization
+      # }
       env {
         name  = "APPSETTING_WEBSITE_SITE_NAME"
         value = "az-cli-workaround"
+      }
+      env {
+        name  = "REPO_URL"
+        value = "https://github.com/davejg10/devops"
       }
       env {
         name  = "MSI_CLIENT_ID"

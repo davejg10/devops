@@ -75,7 +75,7 @@ jobs:
       - name: Terraform plan
         run: |
           terraform plan -input=false \
-            -VAR "github_access_token_secret_name=${{ vars.github_access_token_secret_name }}" \
+            -var "github_access_token_secret_name=${{ vars.github_access_token_secret_name }}" \
             -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
             -var "github_app_id=${{ vars.GH_APP_ID }}" \
             -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \

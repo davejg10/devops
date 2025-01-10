@@ -40,7 +40,7 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          // az acr build actually copies the files to the ACR and its built there...
+          # az acr build actually copies the files to the ACR and its built there...
           az acr build \
             --registry ${{ env.ACR_SERVER_NAME }} \
             --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \

@@ -4,6 +4,3 @@ environment_settings = {
   environment    = "glb"
   app_name       = "ghrunners"
 }
-
-// Self-hosted-runners
-github_access_token_secret_name = "github-app-key"

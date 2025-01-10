@@ -2,8 +2,7 @@ environment_settings = {
   region         = "uksouth"
   region_code    = "uks"
   environment    = "glb"
-  app_name       = "devops-utils"
-  identifier     = "01"
+  app_name       = "devopsutils"
 }
 
 // Networking

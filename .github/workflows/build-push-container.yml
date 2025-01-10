@@ -11,8 +11,8 @@ on:
           - github-runners
 
 env:
-  ACR_NAME: acrglbuksdevops01
-  ACR_SERVER_NAME: acrglbuksdevops01.azurecr.io
+  ACR_NAME: acrglbuksdevopsutils
+  ACR_SERVER_NAME: acrglbuksdevopsutils.azurecr.io
   TAG: ${{ github.run_number }}
 
 permissions:
@@ -39,7 +39,11 @@ jobs:
         run: az acr login --name ${{ env.ACR_NAME }}
 
       - name: Docker build
-        run: docker build -t ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} --build-arg build_version=${{ env.TAG }} .
+        run: |
+          docker build -t ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} --build-arg build_version=${{ env.TAG }} .
+          docker tag ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:latest
 
       - name: Docker push
-        run: docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}
+        run: |
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:latest

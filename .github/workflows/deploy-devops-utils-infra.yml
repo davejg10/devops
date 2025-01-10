@@ -1,17 +1,26 @@
-name: deploy-devops-utils-infra
-run-name: Terraform deploy ${{ env.APP_NAME }} in ${{ env.ENVIRONMENT }}
+name: deploy-devopsutils-infra
+run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment
+        options: 
+          - glb
+      app_name:
+        type: choice
+        description: Application name
+        options: 
+          - devopsutils
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- APP_NAME: devops-utils
- ENVIRONMENT: glb
- work_dir: ./iac
+ work_dir: ./iac/${{ github.event.inputs.app_name }}
 
 permissions:
   id-token: write
@@ -20,10 +29,10 @@ permissions:
 jobs:
   terraform_plan:
     runs-on: ubuntu-latest
-    environment: glb
+    environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}/${{ env.APP_NAME }}
+        working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,26 +43,27 @@ jobs:
           terraform init -input=false \
             -backend-config="resource_group_name=${{ vars.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" \
             -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ env.APP_NAME }}"
+            -backend-config="container_name=${{ github.event.inputs.app_name }}"
       
       - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform plan
+        id: terraform_plan
         run: |
           terraform plan -input=false \
-            -var-file="tfvars/${{ env.ENVIRONMENT }}/main.tfvars" \
-            -out ${{ github.run_number }}-${{ env.ENVIRONMENT }}.tfplan
+            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
+            -out ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
         with:
-          name: tfplan-${{ env.ENVIRONMENT }}
-          path: ${{ env.work_dir }}/${{ github.run_number }}-${{ env.ENVIRONMENT }}.tfplan
+          name: tfplan-${{ github.event.inputs.environment }}
+          path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
   terraform_apply:
     runs-on: ubuntu-latest
-    environment: glb
+    environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan
     defaults:
       run:
@@ -63,7 +73,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: tfplan-${{ env.ENVIRONMENT }}
+          name: tfplan-${{ github.event.inputs.environment }}
           path: ${{ env.work_dir }}
 
       - uses: hashicorp/setup-terraform@v3
@@ -73,7 +83,7 @@ jobs:
           terraform init -input=false \
             -backend-config="resource_group_name=${{ vars.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" \
             -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ env.APP_NAME }}"
+            -backend-config="container_name=${{ github.event.inputs.app_name }}"
 
       - name: Terraform apply
-        run: terraform apply -lock-timeout=300s ${{ github.run_number }}-${{ env.ENVIRONMENT }}.tfplan
+        run: terraform apply -lock-timeout=300s ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan

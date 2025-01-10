@@ -1,0 +1,14 @@
+name: Test self-hosted runners
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - run: |
+          yq
+          docker
+        name: Execute az cli sample commands

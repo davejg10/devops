@@ -13,14 +13,15 @@ on:
         type: choice
         description: Application name
         options: 
-          - devops
+          - devopsutils
+          - ghrunners
 
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac
+ work_dir: ./iac/${{ github.event.inputs.app_name }}
 
 permissions:
   id-token: write
@@ -45,7 +46,17 @@ jobs:
             -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
             -backend-config="container_name=${{ github.event.inputs.app_name }}"
             
-      - name: Terraform destroy
+      - name: Terraform destroy ${{ github.event.inputs.app_name }}
+        if: ${{ github.event.inputs.app_name }} == ghrunners
         run: |
           terraform destroy -auto-approve \
-            -var-file="tfvars/${{ env.environment }}/main.tfvars"
+            -var "github_app_key_secret_name=github-app-key" \
+            -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
+            -var "github_app_id=${{ vars.GH_APP_ID }}" \
+            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars"
+
+      - name: Terraform destroy
+        if: ${{ github.event.inputs.app_name }} == devopsutils
+        run: |
+          terraform destroy -auto-approve \
+            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars"

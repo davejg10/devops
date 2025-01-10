@@ -5,7 +5,6 @@ variable "environment_settings" {
     region_code = string
     environment = string
     app_name    = string
-    identifier  = string
   })
 }
 
@@ -38,30 +37,4 @@ variable "kv_soft_delete_retention_days" {
 
 variable "kv_public_network_access_enabled" {
   type = bool
-}
-
-// Self-hosted-runners
-variable "github_organization" {
-  type = string
-  default = "davejg10"
-}
-variable "project" {
-  type = string
-  default = "devops-runners"
-}
-variable "github_app_key_secret_name" {
-  type = string
-}
-// The rest are all passed in via cmdline
-variable "github_app_id" {
-  type = string
-  default = "test"
-}
-
-variable "github_installation_id" {
-  type = string
-}
-variable "github_app_key" {
-  type = string
-  sensitive   = true
 }

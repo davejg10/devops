@@ -29,7 +29,7 @@ variable "github_app_id" {
 variable "github_installation_id" {
   type = string
 }
-variable "github_access_token" {
-  type      = string
-  sensitive = true
-}
+# variable "github_access_token" {
+#   type      = string
+#   sensitive = true
+# }

@@ -41,10 +41,6 @@ resource "azurerm_container_app_job" "github_runners" {
         name  = "RUNNER_SCOPE"
         value = "repo"
       }
-      env {
-        name = "APP_LOGIN"
-        value = var.github_app_login
-      }
       # env {
       #   name  = "ORG_NAME"
       #   value = var.github_organization

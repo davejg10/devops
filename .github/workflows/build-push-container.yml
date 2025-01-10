@@ -46,7 +46,6 @@ jobs:
             --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
             --build-arg build_version=${{ env.TAG }} .
 
-          az acr repository tag \
-            --name ${{ env.ACR_SERVER_NAME }} \
-            --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
-            --tag latest
+          # Also tag with latest
+          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
+

@@ -29,10 +29,10 @@ resource "azurerm_container_app_job" "github_runners" {
       cpu    = 0.25
       memory = "0.5Gi"
 
-      env {
-        name  = "APP_ID"
-        value = var.github_app_id
-      }
+      # env {
+      #   name  = "APP_ID"
+      #   value = var.github_app_id
+      # }
       env {
         name        = "ACCESS_TOKEN"
         secret_name = var.github_access_token_secret_name

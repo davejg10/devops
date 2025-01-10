@@ -81,7 +81,7 @@ resource "azurerm_container_app_job" "github_runners" {
         }
         authentication {
           secret_name       = var.github_access_token_secret_name
-          trigger_parameter = "appKey"
+          trigger_parameter = "personalAccessToken"
         }
       }
     }

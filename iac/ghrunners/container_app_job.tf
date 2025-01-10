@@ -3,7 +3,7 @@ resource "azurerm_container_app_job" "github_runners" {
     for key in var.container_app_jobs : key => key
   }
 
-  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${each.key}"
+  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${replace(each.key, "_", "-")}"
 
   resource_group_name          = data.azurerm_resource_group.rg.name
   location                     = var.environment_settings.region

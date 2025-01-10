@@ -5,9 +5,5 @@ environment_settings = {
   app_name       = "ghrunners"
 }
 
-container_app_jobs = [
-  "devops",
-  "nomad_infra",
-  "nomad_backend",
-  "nomad_app"
-]
+// Name of repos you want the ghrunners to be scaled to.
+container_app_jobs = ["devops", "nomad_infra", "nomad_backend", "nomad_app"]

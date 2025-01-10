@@ -10,5 +10,5 @@ jobs:
     steps:
       - run: |
           yq
-          dp
+          docker
         name: Execute az cli sample commands

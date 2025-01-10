@@ -14,5 +14,5 @@ jobs:
       - run: |
           az login --identity -u $MSI_CLIENT_ID
           az keyvault secret show --vault-name kv-glb-uks-devopsutils --name 'github-app-key'
-          
+          echo "do some bad code"
         name: Execute az cli sample commands

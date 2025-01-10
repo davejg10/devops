@@ -25,6 +25,12 @@ resource "azurerm_role_assignment" "github_deployer" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "github_deployer" {
+  scope                = azurerm_key_vault.devops.id
+  role_definition_name = "Key Vault Purge Operator"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 output "key_vault_name" {
   value = azurerm_key_vault.devops.name
 }

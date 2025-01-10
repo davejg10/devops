@@ -8,10 +8,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: build packages
-        run: make all
-        
+
       - run: |
-          yq
-          docker
+          echo $APP_ID
+          echo $APP_PRIVATE_KEY
+          echo $RUNNER_SCOPE
+          
         name: Execute az cli sample commands

@@ -75,9 +75,9 @@ resource "azurerm_container_app_job" "github_runners" {
         custom_rule_type = "github-runner"
         metadata = {
           "owner"          = var.github_organization
-          "runnerScope"    = "org"
-          "applicationID"  = var.github_app_id
-          "installationID" = var.github_installation_id
+          "runnerScope"    = "repo"
+          # "applicationID"  = var.github_app_id
+          # "installationID" = var.github_installation_id
         }
         authentication {
           secret_name       = var.github_access_token_secret_name

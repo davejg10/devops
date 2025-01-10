@@ -10,8 +10,7 @@ jobs:
     steps:
 
       - run: |
-          echo $APP_ID
-          echo $APP_PRIVATE_KEY
-          echo $RUNNER_SCOPE
+          az login --identity -u $MSI_CLIENT_ID
+          az keyvault secret show --vault-name kv-glb-uks-devopsutils --name 'github-app-key'
           
         name: Execute az cli sample commands

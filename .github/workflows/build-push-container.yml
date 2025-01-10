@@ -35,9 +35,8 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-
-      - name: ACR login
-        run: docker
+      - name: Start docker
+        run: systemctl start docker
 
       - name: ACR login
         run: az acr login --name ${{ env.ACR_NAME }}

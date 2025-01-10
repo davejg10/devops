@@ -35,9 +35,6 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      # - name: ACR login
-      #   run: az acr login --name ${{ env.ACR_NAME }}
-
       - name: Build image (in ACR)
         run: |
           # az acr build actually copies the files to the ACR and its built there...
@@ -47,5 +44,5 @@ jobs:
             --build-arg build_version=${{ env.TAG }} .
 
           # Also tag with latest
-          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
+          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
 

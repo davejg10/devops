@@ -8,6 +8,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: build packages
+        run: make all
+        
       - run: |
           yq
           docker

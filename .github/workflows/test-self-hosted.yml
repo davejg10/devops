@@ -10,8 +10,5 @@ jobs:
     steps:
 
       - run: |
-          echo $APP_ID
-          echo $APP_PRIVATE_KEY
-          echo $RUNNER_SCOPE
           
         name: Execute az cli sample commands

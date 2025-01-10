@@ -1,5 +1,9 @@
 resource "azurerm_container_app_job" "github_runners" {
-  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
+  for_each = {
+    for key in var.container_app_jobs : key => key
+  }
+
+  name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-${each.key}"
 
   resource_group_name          = data.azurerm_resource_group.rg.name
   location                     = var.environment_settings.region
@@ -39,20 +43,16 @@ resource "azurerm_container_app_job" "github_runners" {
       }
       env {
         name  = "RUNNER_SCOPE"
-        value = "org"
-      }
-      env {
-        name  = "ORG_NAME"
-        value = var.github_organization
+        value = "repo"
       }
       env {
         name  = "APPSETTING_WEBSITE_SITE_NAME"
         value = "az-cli-workaround"
       }
-      # env {
-      #   name  = "REPO_URL"
-      #   value = "https://github.com/davejg10/devops"
-      # }
+      env {
+        name  = "REPO_URL"
+        value = "https://github.com/davejg10/${each.key}"
+      }
       env {
         name  = "MSI_CLIENT_ID"
         value = azurerm_user_assigned_identity.container_app_job.client_id
@@ -75,8 +75,8 @@ resource "azurerm_container_app_job" "github_runners" {
         custom_rule_type = "github-runner"
         metadata = {
           "owner"          = var.github_organization
-          "runnerScope"    = "org"
-          "repos" = "devops, nomad_infra, nomad_backend, nomad_app"
+          "runnerScope"    = "repo"
+          "repos" = each.key
           "applicationID"  = var.github_app_id
           "installationID" = var.github_installation_id
         }

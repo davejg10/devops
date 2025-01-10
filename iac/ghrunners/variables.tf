@@ -9,6 +9,10 @@ variable "environment_settings" {
 }
 
 // Self-hosted-runners
+variable "container_app_jobs" {
+  type = list(string)
+  description = "As we are not a github org we have to create a container job for each repo."
+}
 variable "github_organization" {
   type    = string
   default = "davejg10"

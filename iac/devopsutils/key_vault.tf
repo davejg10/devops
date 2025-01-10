@@ -19,15 +19,9 @@ resource "azurerm_key_vault" "devops" {
   #   }
 }
 
-resource "azurerm_role_assignment" "github_deployer" {
+resource "azurerm_role_assignment" "github_deployer_" {
   scope                = azurerm_key_vault.devops.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
-resource "azurerm_role_assignment" "github_deployer" {
-  scope                = azurerm_key_vault.devops.id
-  role_definition_name = "Key Vault Purge Operator"
+  role_definition_name = "Key Vault Administrator"
   principal_id         = data.azurerm_client_config.current.object_id
 }
 

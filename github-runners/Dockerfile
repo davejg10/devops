@@ -1,4 +1,21 @@
-FROM myoung34/github-runner:ubuntu-jammy
+FROM ghcr.io/actions/actions-runner:2.311.0
 
-# install Azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+USER root
+
+# install curl and jq
+RUN apt-get update && apt-get install -y curl jq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# copy over the start.sh script
+COPY start.sh start.sh
+
+# make the script executable
+RUN chmod +x start.sh
+
+# since the config and run script for actions are not allowed to be run by root,
+# set the user to "runner" so all subsequent commands are run as the runner user
+USER runner
+
+# set the entrypoint to the start.sh script
+ENTRYPOINT ["./start.sh"]

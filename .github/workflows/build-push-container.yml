@@ -8,7 +8,7 @@ on:
         type: choice
         description: Dockerfile dir
         options: 
-          - self-hosted
+          - github-runners
 
 env:
   ACR_NAME: acrglbuksdevopsutils
@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   build_and_push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: glb
     defaults:
       run:

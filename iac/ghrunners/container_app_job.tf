@@ -34,10 +34,6 @@ resource "azurerm_container_app_job" "github_runners" {
         value = var.github_app_id
       }
       env {
-        name  = "APP_LOGIN"
-        value = var.github_app_login
-      }
-      env {
         name        = "APP_PRIVATE_KEY"
         secret_name = var.github_app_key_secret_name
       }
@@ -81,9 +77,8 @@ resource "azurerm_container_app_job" "github_runners" {
           "owner"          = var.github_organization
           "runnerScope"    = "repo"
           "repos" = "devops"
-          # "applicationID"  = var.github_app_id
-          # "installationID" = var.github_installation_id
-
+          "applicationID"  = var.github_app_id
+          "installationID" = var.github_installation_id
         }
         authentication {
           secret_name       = var.github_app_key_secret_name

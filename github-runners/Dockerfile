@@ -4,6 +4,7 @@ FROM myoung34/github-runner:ubuntu-jammy
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # install Terraform
+copy install_terraform.sh install_terraform.sh
 RUN chmod +x install_terraform.sh
 
 ./install_terraform.sh 1.10.4

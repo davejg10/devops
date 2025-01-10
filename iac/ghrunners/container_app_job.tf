@@ -14,8 +14,8 @@ resource "azurerm_container_app_job" "github_runners" {
   replica_timeout_in_seconds   = 1800
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.container_app_job.id]
+    type         = "SystemAssigned"
+    # identity_ids = [azurerm_user_assigned_identity.container_app_job.id]
   }
 
   secret {

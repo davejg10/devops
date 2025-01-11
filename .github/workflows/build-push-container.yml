@@ -36,11 +36,12 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       
       - name: ACR login
-        run: az acr login --name ${{ env.ACR_NAME }}
+        run: |
+          docker run -v /var/run/docker.sock:/var/run/docker.sock -ti docker
+          az acr login --name ${{ env.ACR_NAME }}
 
       - name: Docker build
         run: |
-          docker run -v /var/run/docker.sock:/var/run/docker.sock -ti docker
 
           docker build -t ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} --build-arg build_version=${{ env.TAG }} .
           docker tag ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }} ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:latest

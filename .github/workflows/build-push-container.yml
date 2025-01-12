@@ -37,9 +37,6 @@ jobs:
       
       - name: ACR login
         run: |
-          sudo service --status-all 
-          sudo service docker start
-          # docker run -v /var/run/docker.sock:/var/run/docker.sock -ti docker
           az acr login --name ${{ env.ACR_NAME }}
 
       - name: Docker build

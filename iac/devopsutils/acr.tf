@@ -20,15 +20,12 @@ resource "azurerm_container_registry_task" "build_and_push" {
     type = "SystemAssigned"
   }
 
-  # registry_crednetial {
-  #   source {
-  #     login_mode = "Default"
-  #   }
-  #   custom {
-  #     login_server = azurerm_container_registry.devops.login_server
-  #     identity = 
-  #   }
-  # }
+  docker_step {
+    dockerfile_path      = "Dockerfile"
+    context_path         = "../../github-runners"
+    context_access_token = "n/a"
+    image_names          = ["github-runners:{{.Run.ID}}"]
+  }
 }
 
 resource "azurerm_role_assignment" "acr_task_build_and_push" {

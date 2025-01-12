@@ -1,0 +1,4 @@
+version: 1.0-preview-1
+steps:
+  - build: -t {{.Run.Registry}}/github-runners:{{.Run.ID}} .
+  - push: ["{{.Run.Registry}}/hello-world:{{.Run.ID}}"]a

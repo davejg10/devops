@@ -20,10 +20,16 @@ resource "azurerm_container_registry_task" "build_and_push" {
     type = "SystemAssigned"
   }
 
-  is_system_task = true
+  
 }
 
 resource "azurerm_role_assignment" "acr_task_build_and_push" {
+  provisioner "local-exec" {
+    when = create
+    command = "az acr task create --name build_and_push_task --registry acrglbuksdevopsutils --context /dev/null --cmd 'acrglbuksdevopsutils.acurecr.io/myimage"
+  }
+
+
   scope                = azurerm_container_registry.devops.id
   role_definition_name = "AcrPush"
   principal_id         = azurerm_container_registry_task.build_and_push.identity[0].principal_id

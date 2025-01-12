@@ -7,6 +7,36 @@ resource "azurerm_container_registry" "devops" {
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
 }
 
+// Required to pass under Azure trusted service and therefore bypass blocking network ACL
+resource "azurerm_container_registry_task" "build_and_push" {
+  name                  = "build-and-push-task"
+  container_registry_id = azurerm_container_registry.devops.id
+  platform {
+    os = "Linux"
+
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  # registry_crednetial {
+  #   source {
+  #     login_mode = "Default"
+  #   }
+  #   custom {
+  #     login_server = azurerm_container_registry.devops.login_server
+  #     identity = 
+  #   }
+  # }
+}
+
+resource "azurerm_role_assignment" "acr_task_build_and_push" {
+  scope                = azurerm_container_registry.devops.id
+  role_definition_name = "AcrPush"
+  principal_id         = azurerm_container_registry_task.build_and_push.identity[0].principal_id
+}
+
 resource "azurerm_private_endpoint" "acr" {
   name = "pe-acr-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
 

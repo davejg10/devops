@@ -20,12 +20,7 @@ resource "azurerm_container_registry_task" "build_and_push" {
     type = "SystemAssigned"
   }
 
-  docker_step {
-    dockerfile_path      = "Dockerfile"
-    context_path         = "../../github-runners"
-    context_access_token = "n/a"
-    image_names          = ["github-runners:{{.Run.ID}}"]
-  }
+  is_system_task = true
 }
 
 resource "azurerm_role_assignment" "acr_task_build_and_push" {

@@ -34,7 +34,7 @@ resource "azurerm_container_registry_task" "build_and_push" {
 resource "azurerm_role_assignment" "acr_task_build_and_push" {
   scope                = azurerm_container_registry.devops.id
   role_definition_name = "AcrPush"
-  principal_id         = azurerm_container_registry_task.build_and_push.identity.principal_id
+  principal_id         = azurerm_container_registry_task.build_and_push.identity[0].principal_id
 }
 
 resource "azurerm_private_endpoint" "acr" {

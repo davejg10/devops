@@ -28,6 +28,8 @@ env:
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
  work_dir: ./iac/${{ github.event.inputs.app_name }}
+ DEVOPS_KEY_VAULT_NAME: kv-glb-uks-devopsutils
+ GITHUB_APP_SECRET_NAME: github-app-key
 
 permissions:
   id-token: write
@@ -64,15 +66,41 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       
-      - name: Create a secret in Azure Key Vault
+      - name: Make Key Vault public
+        if: ${{ github.event.inputs.runners }} != 'self-hosted'
         run: |
           # Insert the secret into the Key Vault
-          az keyvault secret set --vault-name kv-glb-uks-devopsutils --name 'github-app-key' --value '${{ secrets.GH_APP_PRIVATE_KEY }}' 
+          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Enabled
 
+          echo "Verifying public access..."
+          while true; do
+              PUBLIC_ACCESS=$(az keyvault show --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --query "properties.publicNetworkAccess" -o tsv)
+
+              if [[ "$PUBLIC_ACCESS" == "Enabled" ]]; then
+                  echo "Key Vault is now public."
+                  break
+              else
+                  echo "Key Vault is not yet public. Retrying in 5 seconds..."
+                  sleep 5
+              fi
+          done
+
+      - name: Create a secret in Azure Key Vault
+        run: |
+          az keyvault secret set --vault-name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --name "${{ env.GITHUB_APP_SECRET_NAME }}" --value "${{ secrets.GH_APP_PRIVATE_KEY }}"
+          SECRET_URI=$(az keyvault secret show --vault-name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --name "${{ env.GITHUB_APP_SECRET_NAME }}" --query "id" -o tsv)
+          echo "SECRET_URI=$SECRET_URI" >> $GITHUB_ENV
+          
+      - name: Make Key Vault private
+        if: always()
+        run: |
+          echo "Changing network access of ${{ env.DEVOPS_KEY_VAULT_NAME }} to private"
+          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Disabled
+          
       - name: Terraform plan
         run: |
           terraform plan -input=false \
-            -var "github_app_key_secret_name=github-app-key" \
+            -var "github_access_token_secret_id=${{ env.SECRET_URI }}" \
             -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
             -var "github_app_id=${{ vars.GH_APP_ID }}" \
             -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
@@ -83,6 +111,8 @@ jobs:
         with:
           name: tfplan-${{ github.event.inputs.environment }}
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
+      
+      
       
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}

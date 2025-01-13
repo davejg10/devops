@@ -100,7 +100,8 @@ jobs:
       - name: Terraform plan
         run: |
           terraform plan -input=false \
-            -var "github_access_token_secret_id=${{ env.SECRET_URI }}" \
+            -var "github_app_key_secret_id=${{ env.SECRET_URI }}" \
+            -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" \
             -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
             -var "github_app_id=${{ vars.GH_APP_ID }}" \
             -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
@@ -111,8 +112,6 @@ jobs:
         with:
           name: tfplan-${{ github.event.inputs.environment }}
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
-      
-      
       
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}

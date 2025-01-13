@@ -29,6 +29,9 @@ variable "github_app_id" {
 variable "github_installation_id" {
   type = string
 }
-variable "github_access_token_secret_id" {
+variable "github_app_key_secret_id" {
+  type = string
+}
+variable "github_app_key_secret_name" {
   type = string
 }

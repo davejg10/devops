@@ -44,7 +44,7 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          az acr task run -r $ACR_NAME -n build_and_push_custom_image --set image_name=github-runners --set dockerfile=Dockerfile -c .
+          az acr task run -r $ACR_NAME -n build_and_push_custom_image_newboty --set image_name=github-runners-testv2 --set dockerfile=Dockerfile -c .
         
           ## az acr build actually copies the files to the ACR and its built there...
           # az acr build \

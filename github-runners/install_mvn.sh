@@ -7,26 +7,24 @@ fi
 
 VERSION=$1
 
+INSTALL_DIR="/opt/maven"
+mkdir $INSTALL_DIR
 
-install_dir="/opt/maven"
-mkdir ${install_dir}
-
-curl -fsSL "http://www.mirrorservice.org/sites/ftp.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" | tar zx --strip-components=1 -C ${install_dir}
-
+curl -fsSL "http://www.mirrorservice.org/sites/ftp.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" | tar zx --strip-components=1 -C $INSTALL_DIR
 
 cat << EOF > /etc/profile.d/maven.sh
 #!/bin/sh
-export MAVEN_HOME=${install_dir}
-export M2_HOME=${install_dir}
-export M2=${install_dir}/bin
-export PATH=${install_dir}/bin:$PATH
+export MAVEN_HOME=$INSTALL_DIR
+export M2_HOME=$INSTALL_DIR
+export M2=$INSTALL_DIR/bin
+export PATH=$INSTALL_DIR/bin:$PATH
 EOF
 
-# Verify installation using Bash
-bash -c "source /etc/profile.d/maven.sh && mvn -version"
+chmod +x /etc/profile.d/jdk.sh
+
 # Verify installation using the dot operator for sourcing
 . /etc/profile.d/maven.sh
-java -version
+mvn -version
 
-echo maven installed to ${install_dir}
+echo maven installed to $INSTALL_DIR
 

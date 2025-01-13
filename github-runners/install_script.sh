@@ -8,10 +8,10 @@ echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh
 ./install_terraform.sh $TERRAFORM_VERSION
 
-echo "Installing Maven version $MVN_VERSION"
-chmod +x install_mvn.sh
-./install_mvn.sh $MVN_VERSION
-
 echo "Installing JDK version $JDK_VERSION"
 chmod +x install_jdk.sh
 ./install_jdk.sh $JDK_VERSION
+
+echo "Installing Maven version $MVN_VERSION"
+chmod +x install_mvn.sh
+./install_mvn.sh $MVN_VERSION

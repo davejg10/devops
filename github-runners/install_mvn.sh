@@ -21,8 +21,12 @@ export M2_HOME=${install_dir}
 export M2=${install_dir}/bin
 export PATH=${install_dir}/bin:$PATH
 EOF
-source /etc/profile.d/maven.sh
+
+# Verify installation using Bash
+bash -c "source /etc/profile.d/maven.sh && mvn -version"
+# Verify installation using the dot operator for sourcing
+. /etc/profile.d/maven.sh
+java -version
 
 echo maven installed to ${install_dir}
 
-mvn --version

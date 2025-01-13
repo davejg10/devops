@@ -37,7 +37,6 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          # az acr task run -r acrglbuksdevopsutils -n github-task --set image=github-test:latest --set dockerfile=Dockerfile -c .
           az acr task create \
             --registry ${{ env.ACR_SERVER_NAME }} \
             --name buildAndPushTask \

@@ -20,7 +20,7 @@ export M2=$INSTALL_DIR/bin
 export PATH=$INSTALL_DIR/bin:$PATH
 EOF
 
-chmod +x /etc/profile.d/jdk.sh
+chmod +x /etc/profile.d/maven.sh
 
 # Verify installation using the dot operator for sourcing
 . /etc/profile.d/maven.sh

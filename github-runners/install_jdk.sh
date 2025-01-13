@@ -13,6 +13,7 @@ mkdir $INSTALL_DIR
 curl -fsSL "https://download.oracle.com/java/$VERSION/latest/jdk-${VERSION}_linux-x64_bin.tar.gz" | tar zx --strip-components=1 -C $INSTALL_DIR
 
 # Add JDK to PATH
+echo "export JAVA_HOME=$INSTALL_DIR/bin" >> /etc/profile.d/jdk.sh
 echo "export PATH=$INSTALL_DIR/bin:$PATH" >> /etc/profile.d/jdk.sh
 chmod +x /etc/profile.d/jdk.sh
 

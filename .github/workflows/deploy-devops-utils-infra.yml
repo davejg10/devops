@@ -14,6 +14,12 @@ on:
         description: Application name
         options: 
           - devopsutils
+      runners:
+        type: choice
+        description: Github runner type
+        options: 
+          - ubuntu-latest
+          - self-hosted
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -28,13 +34,20 @@ permissions:
 
 jobs:
   terraform_plan:
-    runs-on: self-hosted
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform init
         run: |
@@ -60,7 +73,7 @@ jobs:
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
   terraform_apply:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan
     defaults:
@@ -68,6 +81,13 @@ jobs:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - uses: actions/download-artifact@v4
         with:

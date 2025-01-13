@@ -15,6 +15,13 @@ on:
         options: 
           - devopsutils
           - ghrunners
+      runners:
+        type: choice
+        description: Github runner type
+        default: self-hosted
+        options: 
+          - ubuntu-latest
+          - self-hosted
 
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}

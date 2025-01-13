@@ -13,12 +13,23 @@ variable "vnet_address_space" {
   type = string
 }
 
+variable "ghrunner_subnet_address_prefixes" {
+  type = string
+}
+variable "private_endpoint_subnet_address_prefixes" {
+  type = string
+}
+
 // Azure Container Registry
 variable "acr_sku" {
   type = string
 }
 
 variable "acr_zone_redundancy_enabled" {
+  type = bool
+}
+
+variable "kv_public_network_access_enabled" {
   type = bool
 }
 

@@ -9,6 +9,13 @@ on:
         description: Dockerfile dir
         options: 
           - github-runners
+      runners:
+        type: choice
+        description: Github runner type
+        default: self-hosted
+        options: 
+          - ubuntu-latest
+          - self-hosted
 
 env:
   ACR_NAME: acrglbuksdevopsutils
@@ -20,7 +27,7 @@ permissions:
 
 jobs:
   build_and_push:
-    runs-on: self-hosted
+    runs-on: ${{ github.event.inputs.runners }}
     environment: glb
     defaults:
       run:
@@ -37,12 +44,14 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          # az acr build actually copies the files to the ACR and its built there...
-          az acr build \
-            --registry ${{ env.ACR_SERVER_NAME }} \
-            --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
-            --build-arg build_version=${{ env.TAG }} .
+          az acr task run -r $ACR_NAME -n build_and_push_custom_image --set image_name=github-runners --set dockerfile=Dockerfile -c .
+        
+          ## az acr build actually copies the files to the ACR and its built there...
+          # az acr build \
+          #   --registry ${{ env.ACR_SERVER_NAME }} \
+          #   --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
+          #   --build-arg build_version=${{ env.TAG }} .
 
-          # Also tag with latest
-          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
+          # # Also tag with latest
+          # az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
 

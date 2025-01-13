@@ -14,6 +14,13 @@ on:
         description: Application name
         options: 
           - ghrunners
+      runners:
+        type: choice
+        description: Github runner type
+        default: self-hosted
+        options: 
+          - ubuntu-latest
+          - self-hosted
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -28,15 +35,13 @@ permissions:
 
 jobs:
   terraform_plan:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
 
       - name: Terraform init
         run: |
@@ -76,7 +81,7 @@ jobs:
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
   terraform_apply:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan
     defaults:

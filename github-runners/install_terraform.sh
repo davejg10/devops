@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Check if a version argument is provided

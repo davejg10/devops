@@ -18,18 +18,10 @@ resource "null_resource" "fetch_uk_south_acr_ips" {
   }
 }
 
-data "local_file" "dynamic_output" {
-  depends_on = [
-    null_resource.fetch_uk_south_acr_ips
-  ]
-
-  filename = "${path.module}/local.uk_south_acr_azure_ip_ranges"
-}
-
 
 resource "azurerm_container_registry" "devops" {
   depends_on = [
-    local_file.dynamic_output
+    null_resource.fetch_uk_south_acr_ips
   ]
 
   name = "acr${var.environment_settings.environment}${var.environment_settings.region_code}${var.environment_settings.app_name}"
@@ -41,7 +33,14 @@ resource "azurerm_container_registry" "devops" {
 
   network_rule_set {
     default_action = "Deny"
-
+    
+    dynamic "ip_rule" {
+      for_each = jsondecode(file("${path.module}/ip_ranges.json")).ip_ranges
+      content {
+        action = "Allow"
+        ip_range = ip_rule.value
+      }
+    }
 
   }
 }

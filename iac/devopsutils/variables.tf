@@ -29,7 +29,7 @@ variable "acr_zone_redundancy_enabled" {
   type = bool
 }
 
-variable "kv_public_network_access_enabled" {
+variable "acr_public_network_access_enabled" {
   type = bool
 }
 
@@ -47,5 +47,10 @@ variable "kv_soft_delete_retention_days" {
 }
 
 variable "kv_public_network_access_enabled" {
+  type = bool
+}
+
+// LaW
+variable "law_internet_ingestion_enabled" {
   type = bool
 }

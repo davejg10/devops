@@ -6,9 +6,7 @@ resource "azurerm_log_analytics_workspace" "devops" {
 
   sku               = "PerGB2018"
   retention_in_days = 30
-  internet_ingestion_enabled = var.internet_ingestion_enabled
-
-  
+  internet_ingestion_enabled = var.law_internet_ingestion_enabled
 }
 
 resource "azurerm_monitor_private_link_scope" "devops" {

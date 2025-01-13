@@ -5,7 +5,10 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-echo "JAVA VERSION MOTHER FUCKA $JAVA_HOME"
+echo "JAVA HOME FUCKA $JAVA_HOME"
+echo "JAVA VERSION MOTHER FUCKA"
+echo $(java -version)
+
 
 VERSION=$1
 

@@ -73,7 +73,7 @@ resource "azurerm_role_assignment" "dev_nomad_01_tf_storage_blob_owner" {
 }
 
 resource "azurerm_role_assignment" "dev_nomad_01_rg_reader" {
-  scope                = data.terraform_remote_state.devopsutils.outputs.rg_id
+  scope                = data.terraform_remote_state.devopsutils.outputs.resource_group_id
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
 }

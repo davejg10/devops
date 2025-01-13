@@ -19,11 +19,11 @@ resource "azurerm_container_registry_task" "build_push_custom_image" {
     }
   }
 
-
   file_step {
     task_file_path = "${path.module}/acb.yaml"
-    context_path = "/dev/null"
+    # context_path = "/dev/null"
   }
+
 }
 
 resource "azurerm_role_assignment" "build_push_custom_image" {

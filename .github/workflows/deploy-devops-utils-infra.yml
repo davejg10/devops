@@ -17,9 +17,10 @@ on:
       runners:
         type: choice
         description: Github runner type
+        default: self-hosted
         options: 
-          - ubuntu-latest
           - self-hosted
+          - ubuntu-latest
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -43,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Terraform
-        if:  ${{ github.event.inputs.runners }} != 'self-hosted'
+        if:  ${{ github.event.inputs.runners }} == 'ubuntu-latest'
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform init

@@ -17,7 +17,6 @@ on:
       runners:
         type: choice
         description: Github runner type
-        default: self-hosted
         options: 
           - ubuntu-latest
           - self-hosted

@@ -1,11 +1,6 @@
 locals {
-  
   uk_south_acr_azure_ip_ranges = jsondecode(file("${path.module}/uk_south.json")).ip_ranges
   # uk_west_acr_azure_ip_ranges = "${path.cwd}/uk_south.json"
-}
-
-variable "uk_south_acr_azure_ip_ranges" {
-  
 }
 
 # variable "uk_south_acr_azure_ip_ranges" {

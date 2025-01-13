@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 TERRAFORM_VERSION="1.10.4"
 MVN_VERSION="3.9.9"

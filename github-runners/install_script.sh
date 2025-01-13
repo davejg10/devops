@@ -11,7 +11,7 @@ for file in /etc/profile.d/*.sh; do
     fi
 done
 EOF
-
+ps -p $$ -o comm=
 cat ~/.bashrc
 
 echo "Installing Terraform version $TERRAFORM_VERSION"

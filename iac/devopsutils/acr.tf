@@ -42,7 +42,7 @@ resource "azurerm_container_registry" "devops" {
 
   provisioner "local-exec" {
     when = create
-    <<CMD
+    command = <<CMD
       TASK_NAME="build_and_push_custom_image"
       system_identity_principal=$(az acr task create -t $TASK_NAME -n github-task -r ${self.name} -c /dev/null -f acb.yaml --auth-mode None --assign-identity [system] --base-image-trigger-enabled false --query "identity.principalId" -o tsv)
       az role assignment create --assignee $system_identity_principal --role AcrPush --scope ${self.id}

@@ -21,6 +21,11 @@ resource "azurerm_role_definition" "vnet_peer" {
   ]
 }
 
+data "azurerm_role_definition" "acr_pull" {
+  name = "AcrPull"
+  scope = data.terraform_remote_state.devopsutils.outputs.acr_id
+}
+
 resource "azurerm_role_definition" "run_acr_task" {
   name        = "devopsutils-acr-task-run"
   scope       = data.terraform_remote_state.devopsutils.outputs.acr_id

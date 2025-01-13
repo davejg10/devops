@@ -17,6 +17,12 @@ resource "azurerm_resource_group" "dev_nomad_01" {
   name     = "rg-${local.dev_nomad_environment_settings.environment}-${local.dev_nomad_environment_settings.region_code}-${local.dev_nomad_environment_settings.app_name}-01"
   location = local.dev_nomad_environment_settings.region
 }
+resource "azurerm_management_lock" "dev_nomad_01_tf" {
+  name       = "DontDelete"
+  scope      = azurerm_resource_group.dev_nomad_01_tf.id
+  lock_level = "CanNotDelete"
+  notes      = "This Resource Group should not be deleted"
+}
 
 resource "azurerm_storage_account" "dev_nomad_01_tf" {
   name                     = "st${local.dev_nomad_environment_settings.environment}${local.dev_nomad_environment_settings.region_code}${local.dev_nomad_environment_settings.app_name}${local.dev_nomad_environment_settings.identifier}"
@@ -44,14 +50,35 @@ resource "azurerm_role_assignment" "dev_nomad_01_vnet_peer" {
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
 }
 
-// This ALLOWS the identity to assign the given role definition to another identity.
-resource "azurerm_role_assignment" "dev_nomad_01_assign_run_acr_task_perms" {
+
+// This ALLOWS the identity to assign the given roles to another identity.
+resource "azurerm_role_assignment" "dev_nomad_01_assign_acr_perms" {
   scope                = data.terraform_remote_state.devopsutils.outputs.acr_id
   role_definition_name = "Role Based Access Control Administrator"
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
   condition_version    = "2.0"
 
-  condition  = "@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(azurerm_role_definition.run_acr_task.role_definition_id)}}"
+  condition = <<-EOT
+                (
+                 (
+                  !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})
+                 )
+                 OR 
+                 (
+                  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {7f951dda-4ed3-4680-a7ca-43fe172d538d, 84b3072a-7246-e17b-9140-3bfd6b984736}
+                 )
+                )
+                AND
+                (
+                 (
+                  !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})
+                 )
+                 OR 
+                 (
+                  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {84b3072a-7246-e17b-9140-3bfd6b984736, 7f951dda-4ed3-4680-a7ca-43fe172d538d}
+                 )
+                )
+                EOT
 }
 
 resource "azurerm_role_assignment" "dev_nomad_01_rg_contributor" {
@@ -62,7 +89,7 @@ resource "azurerm_role_assignment" "dev_nomad_01_rg_contributor" {
 
 resource "azurerm_role_assignment" "dev_nomad_01_rg_uaa" {
   scope                = azurerm_resource_group.dev_nomad_01.id
-  role_definition_name = "Role Based Access Control Administrator"
+  role_definition_name = "User Access Administrator"
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
 }
 
@@ -75,6 +102,13 @@ resource "azurerm_role_assignment" "dev_nomad_01_tf_storage_blob_owner" {
 resource "azurerm_role_assignment" "dev_nomad_01_rg_reader" {
   scope                = data.terraform_remote_state.devopsutils.outputs.resource_group_id
   role_definition_name = "Reader"
+  principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
+}
+
+// Usually we would use Azure Policy for this rather than having our identity write the A records themselves
+resource "azurerm_role_assignment" "dev_nomad_01_rg_dns_contributor" {
+  scope                = data.terraform_remote_state.devopsutils.outputs.resource_group_id
+  role_definition_name = "Private DNS Zone Contributor"
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
 }
 

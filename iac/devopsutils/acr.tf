@@ -17,7 +17,6 @@ resource "terraform_data" "create_acr_task_diff" {
   input = filebase64(local.create_acr_task_file_path)
 }
 
-
 resource "terraform_data" "create_acr_task" {
   triggers_replace = [
     azurerm_container_registry.devops.id,
@@ -26,6 +25,12 @@ resource "terraform_data" "create_acr_task" {
 
   provisioner "local-exec" {
     command = "chmod +x ${local.create_acr_task_file_path} && ./${local.create_acr_task_file_path}"
+
+    environment = {
+      ACR_NAME = azurerm_container_registry.devops.name
+      ACR_LOGIN_SERVER = azurerm_container_registry.devops.login_server
+      ACR_ID = azurerm_container_registry.devops.id
+    }
   }
 }
 

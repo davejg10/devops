@@ -11,5 +11,5 @@ COPY install_jdk.sh install_jdk.sh
 
 SHELL ["/bin/bash", "-c"]
 
-RUN chmod +x install_script.sh
-RUN ./install_script.sh
+RUN /bin/bash -c chmod +x install_script.sh
+RUN /bin/bash -c ./install_script.sh

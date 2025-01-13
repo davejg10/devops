@@ -5,6 +5,9 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+source ~/.bashrc
+java -version
+
 VERSION=$1
 
 VERSION="3.9.9"

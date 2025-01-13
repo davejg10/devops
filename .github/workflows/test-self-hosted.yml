@@ -8,5 +8,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: |
-          ps -p $$ -o comm=
+          cat ~/.bashrc
+          java -version
+
+          source ~/.bashrc
+
+          java -version
         name: Execute az cli sample commands

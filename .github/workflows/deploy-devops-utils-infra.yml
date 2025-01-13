@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Terraform
-        if:  ${{ github.event.inputs.runners }} == 'ubuntu-latest'
+        if: ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform init

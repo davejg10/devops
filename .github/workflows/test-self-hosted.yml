@@ -8,7 +8,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: |
-          cat ~/.bashrc
           java -version
 
           source ~/.bashrc

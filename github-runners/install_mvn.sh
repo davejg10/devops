@@ -1,9 +1,11 @@
-!/bin/bash
+#!/bin/bash
 # Check if a version argument is provided
 if [ -z "$1" ]; then
   echo "Usage: $0 <version>"
   exit 1
 fi
+
+echo "JAVA VERSION MOTHER FUCKA $JAVA_HOME"
 
 VERSION=$1
 

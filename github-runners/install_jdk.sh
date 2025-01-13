@@ -1,5 +1,4 @@
-#!/bin/bash
-
+F
 # Check if a version argument is provided
 if [ -z "$1" ]; then
   echo "Usage: $0 <version>"

@@ -37,18 +37,20 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          az acr task create \
-            --registry ${{ env.ACR_SERVER_NAME }} \
-            --name buildAndPushTask \
-            --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
-            --file Dockerfile \
-        
-          # az acr build actually copies the files to the ACR and its built there...
-          az acr build \
-            --registry ${{ env.ACR_SERVER_NAME }} \
-            --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
-            --build-arg build_version=${{ env.TAG }} .
 
-          # Also tag with latest
-          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
+          az acr task run -r acrglbuksdevopsutils -n github-task --set image=github-test:latest --set dockerfile=Dockerfile -c .
+          # az acr task create \
+          #   --registry ${{ env.ACR_SERVER_NAME }} \
+          #   --name buildAndPushTask \
+          #   --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
+          #   --file Dockerfile \
+        
+          # # az acr build actually copies the files to the ACR and its built there...
+          # az acr build \
+          #   --registry ${{ env.ACR_SERVER_NAME }} \
+          #   --image "${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" \
+          #   --build-arg build_version=${{ env.TAG }} .
+
+          # # Also tag with latest
+          # az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.dockerfile_dir }}:${{ env.TAG }}" --image ${{ github.event.inputs.dockerfile_dir }}:latest --force
 

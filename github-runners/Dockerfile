@@ -9,7 +9,7 @@ COPY install_terraform.sh install_terraform.sh
 COPY install_mvn.sh install_mvn.sh
 COPY install_jdk.sh install_jdk.sh
 
-SHELL [“/bin/bash”, “-c”]
+SHELL ["/bin/bash", "-c"]
 
 RUN chmod +x install_script.sh
 RUN ./install_script.sh

@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=4.14.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
   }
 }
 
@@ -22,6 +26,11 @@ provider "azurerm" {
   subscription_id                 = "fd1f9c42-234f-4f5a-b49c-04bcfb79351d"
 
   features {}
+}
+
+provider "github" {
+  token = var.github_pat_token
+  owner = var.github_organisation_target
 }
 
 data "azurerm_client_config" "current" {}

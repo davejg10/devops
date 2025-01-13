@@ -12,13 +12,13 @@ for file in /etc/profile.d/*.sh; do
 done
 EOF
 
-echo
-
-echo "the shell iS"
-ps -p $$ -o comm=
-
-echo
-cat ~/.bashrc
+cat << 'EOF' >> ~/.bash_profile
+for file in /etc/profile.d/*.sh; do
+    if [ -r "$file" ]; then
+        . "$file"
+    fi
+done
+EOF
 
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh

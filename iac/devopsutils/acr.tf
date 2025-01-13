@@ -1,37 +1,3 @@
-# resource "azurerm_container_registry_task" "build_push_custom_image" {
-#   name                  = "build-push-custom-image"
-#   container_registry_id = azurerm_container_registry.devops.id
-#   platform {
-#     os = "Linux"
-#   }
-
-#   identity {
-#     type = "SystemAssigned"
-#   }
-
-#   registry_credential {
-#     source {
-#       login_mode = "None"
-#     }
-#     custom {
-#       login_server = azurerm_container_registry.devops.login_server
-#       identity = "[system]"
-#     }
-#   }
-
-#   file_step {
-#     task_file_path = "${path.module}/acb.yaml"
-#     # context_path = "/dev/null"
-#   }
-
-# }
-
-# resource "azurerm_role_assignment" "build_push_custom_image" {
-#   scope                = azurerm_container_registry.devops.id
-#   role_definition_name = "AcrPush"
-#   principal_id         = azurerm_container_registry_task.build_push_custom_image.identity[0].principal_id
-# }
-
 resource "azurerm_container_registry" "devops" {
   name = "acr${var.environment_settings.environment}${var.environment_settings.region_code}${var.environment_settings.app_name}"
 

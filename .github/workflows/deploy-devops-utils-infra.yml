@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   terraform_plan:
-    runs-on: ${{ github.event.inputs.runners }}
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
@@ -73,7 +73,7 @@ jobs:
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
   terraform_apply:
-    runs-on: ${{ github.event.inputs.runners }}
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan
     defaults:

@@ -92,7 +92,7 @@ jobs:
           echo "SECRET_URI=$SECRET_URI" >> $GITHUB_ENV
           
       - name: Make Key Vault private
-        if: always()
+        if: always() && ${{ github.event.inputs.runners }} != 'self-hosted'
         run: |
           echo "Changing network access of ${{ env.DEVOPS_KEY_VAULT_NAME }} to private"
           az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Disabled

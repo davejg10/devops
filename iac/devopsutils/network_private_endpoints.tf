@@ -7,7 +7,7 @@ resource "azurerm_subnet" "private_endpoints" {
 }
 
 resource "azurerm_network_security_group" "private_endpoints_subnet" {
-  name                = "nsg-ghrunner-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
+  name                = "nsg-private-endpoints-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.environment_settings.region
 }

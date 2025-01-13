@@ -36,11 +36,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Terraform Validate
-        run: |
-          curl -o ips.json https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250106.json
-          jq -r '.values[] | select(.name == "AzureContainerRegistry.UKSouth") | {ip_ranges: .properties.addressPrefixes}' ips.json > "uk_south.json"
-          jq -r '.values[] | select(.name == "AzureContainerRegistry.UKWest") | {ip_ranges: .properties.addressPrefixes}' ips.json > "uk_west.json"
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform init
         run: |
@@ -74,6 +75,13 @@ jobs:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - uses: actions/download-artifact@v4
         with:

@@ -6,9 +6,12 @@ if [ -z "$1" ]; then
 fi
 
 echo "JAVA HOME FUCKA $JAVA_HOME"
-echo "JAVA VERSION MOTHER FUCKA"
-echo $(java -version)
+source ~/.bashrc
 
+java -version
+
+source /etc/profile.d/jdk.sh
+java -version
 
 VERSION=$1
 

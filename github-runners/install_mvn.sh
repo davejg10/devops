@@ -7,6 +7,7 @@ fi
 
 VERSION=$1
 
+VERSION="3.9.9"
 INSTALL_DIR="/opt/maven"
 mkdir $INSTALL_DIR
 

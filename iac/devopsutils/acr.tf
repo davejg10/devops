@@ -1,36 +1,36 @@
-resource "azurerm_container_registry_task" "build_push_custom_image" {
-  name                  = "build-push-custom-image"
-  container_registry_id = azurerm_container_registry.devops.id
-  platform {
-    os = "Linux"
-  }
+# resource "azurerm_container_registry_task" "build_push_custom_image" {
+#   name                  = "build-push-custom-image"
+#   container_registry_id = azurerm_container_registry.devops.id
+#   platform {
+#     os = "Linux"
+#   }
 
-  identity {
-    type = "SystemAssigned"
-  }
+#   identity {
+#     type = "SystemAssigned"
+#   }
 
-  registry_credential {
-    source {
-      login_mode = "None"
-    }
-    custom {
-      login_server = azurerm_container_registry.devops.login_server
-      identity = "[system]"
-    }
-  }
+#   registry_credential {
+#     source {
+#       login_mode = "None"
+#     }
+#     custom {
+#       login_server = azurerm_container_registry.devops.login_server
+#       identity = "[system]"
+#     }
+#   }
 
-  file_step {
-    task_file_path = "${path.module}/acb.yaml"
-    # context_path = "/dev/null"
-  }
+#   file_step {
+#     task_file_path = "${path.module}/acb.yaml"
+#     # context_path = "/dev/null"
+#   }
 
-}
+# }
 
-resource "azurerm_role_assignment" "build_push_custom_image" {
-  scope                = azurerm_container_registry.devops.id
-  role_definition_name = "AcrPush"
-  principal_id         = azurerm_container_registry_task.build_push_custom_image.identity[0].principal_id
-}
+# resource "azurerm_role_assignment" "build_push_custom_image" {
+#   scope                = azurerm_container_registry.devops.id
+#   role_definition_name = "AcrPush"
+#   principal_id         = azurerm_container_registry_task.build_push_custom_image.identity[0].principal_id
+# }
 
 resource "azurerm_container_registry" "devops" {
   name = "acr${var.environment_settings.environment}${var.environment_settings.region_code}${var.environment_settings.app_name}"
@@ -40,7 +40,15 @@ resource "azurerm_container_registry" "devops" {
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
 
-
+  provisioner "local-exec" {
+    when = create
+    <<CMD
+      TASK_NAME="build_and_push_custom_image"
+      system_identity_principal=$(az acr task create -t $TASK_NAME -n github-task -r ${self.name} -c /dev/null -f acb.yaml --auth-mode None --assign-identity [system] --base-image-trigger-enabled false --query "identity.principalId" -o tsv)
+      az role assignment create --assignee $system_identity_principal --role AcrPush --scope ${self.id}
+      az acr task credential add -r ${self.name} -n $TASK_NAME --login-server ${self.login_server} --use-identity [system]
+    CMD
+  }
 }
 
 resource "azurerm_private_endpoint" "acr" {

@@ -20,3 +20,23 @@ resource "azurerm_role_definition" "vnet_peer" {
     data.terraform_remote_state.devops.vnet_id
   ]
 }
+
+resource "azurerm_role_definition" "run_acr_task" {
+  name        = "devopsutils-acr-task-run"
+  scope       = data.terraform_remote_state.devops.acr_id
+  description = "A custom role that allows an identity to run a pre-made ACR task."
+
+  # WARNING: This allows the identity to delete peers on the central vnet!!  
+  permissions {
+    actions = [
+      "Microsoft.ContainerRegistry/registries/taskruns/read",
+      "Microsoft.ContainerRegistry/registries/taskruns/write"
+    ]
+    data_actions = []
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    data.terraform_remote_state.devops.acr_id
+  ]
+}

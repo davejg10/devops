@@ -1,4 +1,7 @@
-version: 1.0-preview-1
+version: '1.0'
 steps:
-  - build: -t {{.Run.Registry}}/github-runners:{{.Run.ID}} .
-  - push: ["{{.Run.Registry}}/hello-world:{{.Run.ID}}"]a
+  - build:
+      imageNames:
+        - acrglbuksdevopsutils.azurecr.io/myapp:latest
+      context: .
+      dockerfile: Dockerfile

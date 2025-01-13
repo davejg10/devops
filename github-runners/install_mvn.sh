@@ -5,14 +5,6 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-echo "JAVA HOME FUCKA $JAVA_HOME"
-source ~/.bashrc
-
-java -version
-
-source /etc/profile.d/jdk.sh
-java -version
-
 VERSION=$1
 
 VERSION="3.9.9"

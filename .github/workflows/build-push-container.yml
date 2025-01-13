@@ -37,8 +37,8 @@ jobs:
 
       - name: Build image (in ACR)
         run: |
-          az acr task run -n build_and_push_task -r acrglbuksdevopsutils -c . -f Dockerfile
-          
+          az acr task run -n build_and_push_task -r acrglbuksdevopsutils -c . -f Dockerfile --verbose
+
           # az acr task create \
           #   --registry ${{ env.ACR_SERVER_NAME }} \
           #   --name buildAndPushTask \

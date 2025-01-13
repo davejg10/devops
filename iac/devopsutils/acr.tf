@@ -1,3 +1,20 @@
+resource "null_resource" "fetch_uk_south_acr_ips" {
+
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    # Logs into the Service principal that has subscription permission over the core network.
+    command = <<CMD
+      curl -o ips.json https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250106.json
+    CMD
+  }
+}
+
+
+
 resource "azurerm_container_registry" "devops" {
   name = "acr${var.environment_settings.environment}${var.environment_settings.region_code}${var.environment_settings.app_name}"
 
@@ -5,34 +22,6 @@ resource "azurerm_container_registry" "devops" {
   location                = var.environment_settings.region
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
-}
-
-// Required to pass under Azure trusted service and therefore bypass blocking network ACL
-resource "azurerm_container_registry_task" "build_and_push" {
-  name                  = "build-and-push-task"
-  container_registry_id = azurerm_container_registry.devops.id
-  platform {
-    os = "Linux"
-
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  
-}
-
-resource "azurerm_role_assignment" "acr_task_build_and_push" {
-  provisioner "local-exec" {
-    when = create
-    command = "az acr task create --name build_and_push_task --registry acrglbuksdevopsutils --context /dev/null --cmd 'acrglbuksdevopsutils.acurecr.io/myimage"
-  }
-
-
-  scope                = azurerm_container_registry.devops.id
-  role_definition_name = "AcrPush"
-  principal_id         = azurerm_container_registry_task.build_and_push.identity[0].principal_id
 }
 
 resource "azurerm_private_endpoint" "acr" {

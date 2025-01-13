@@ -10,6 +10,6 @@ jobs:
     steps:
 
       - run: |
-          az login --identity -u $MSI_CLIENT_ID
-          
+          curl -o ips.json https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250106.json
+          jq -r '.values[] | select(.name == "AzureContainerRegistry.UKSouth") | .properties.addressPrefixes' ips.json
         name: Execute az cli sample commands

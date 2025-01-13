@@ -39,16 +39,6 @@ resource "azurerm_container_registry" "devops" {
   location                = var.environment_settings.region
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
-
-  provisioner "local-exec" {
-    when = create
-    command = <<CMD
-      TASK_NAME="build_and_push_custom_image"
-      system_identity_principal=$(az acr task create -t $TASK_NAME -n github-task -r ${self.name} -c /dev/null -f acb.yaml --auth-mode None --assign-identity [system] --base-image-trigger-enabled false --query "identity.principalId" -o tsv)
-      az role assignment create --assignee $system_identity_principal --role AcrPush --scope ${self.id}
-      az acr task credential add -r ${self.name} -n $TASK_NAME --login-server ${self.login_server} --use-identity [system]
-    CMD
-  }
 }
 
 resource "terraform_data" "create_acr_task" {

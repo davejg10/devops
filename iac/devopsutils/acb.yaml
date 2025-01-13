@@ -1,5 +1,6 @@
 version: v1.1.0
 steps:
-- build: -t $Registry/{{.Values.image}} -f {{.Values.dockerfile}} .
+- build: -t $Registry/{{.Values.image_name}} -f {{.Values.dockerfile}} .
 - push:
-    - $Registry/{{.Values.image}}
+    - $Registry/{{.Values.image}}/{{.Run.ID}}
+    - $Registry/{{.Values.image}}/latest

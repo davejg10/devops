@@ -29,6 +29,10 @@ variable "acr_zone_redundancy_enabled" {
   type = bool
 }
 
+variable "kv_public_network_access_enabled" {
+  type = bool
+}
+
 // Key Vault
 variable "key_vault_sku_name" {
   type = string

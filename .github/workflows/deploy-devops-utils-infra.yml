@@ -14,6 +14,13 @@ on:
         description: Application name
         options: 
           - devopsutils
+      runners:
+        type: choice
+        description: Github runner type
+        default: self-hosted
+        options: 
+          - ubuntu-latest
+          - self-hosted
     
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -28,7 +35,7 @@ permissions:
 
 jobs:
   terraform_plan:
-    runs-on: self-hosted
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
@@ -67,7 +74,7 @@ jobs:
           path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
       
   terraform_apply:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan
     defaults:

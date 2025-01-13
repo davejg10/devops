@@ -11,12 +11,7 @@ resource "azurerm_key_vault" "devops" {
 
   sku_name = var.key_vault_sku_name
 
-  // Was going to whitelist github runner ips but there are > 4000 ranges!
-  // Public until we create self-hosted runners
   public_network_access_enabled = var.kv_public_network_access_enabled
-  #   network_acls {
-  #     default_action = "Allow"
-  #   }
 }
 
 resource "azurerm_role_assignment" "github_deployer" {

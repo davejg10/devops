@@ -5,6 +5,7 @@ resource "azurerm_container_registry" "devops" {
   location                = var.environment_settings.region
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
+  public_network_access_enabled = var.kv_public_network_access_enabled
 }
 
 resource "terraform_data" "create_acr_task" {

@@ -12,6 +12,8 @@ for file in /etc/profile.d/*.sh; do
 done
 EOF
 
+cat ~/.bashrc
+
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh
 ./install_terraform.sh $TERRAFORM_VERSION

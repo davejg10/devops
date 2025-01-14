@@ -3,7 +3,7 @@
 // We therefore create a job per repo we want to have the jobs for. 
 resource "azurerm_container_app_job" "github_runners" {
   for_each = {
-    for key in var.container_app_jobs : key => value
+    for key, value in var.container_app_jobs : key => value
   }
 
   name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${replace(each.key, "_", "-")}"

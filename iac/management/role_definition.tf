@@ -31,11 +31,15 @@ resource "azurerm_role_definition" "run_acr_task" {
   scope       = data.terraform_remote_state.devopsutils.outputs.acr_id
   description = "A custom role that allows an identity to run a pre-made ACR task."
 
-  # WARNING: This allows the identity to delete peers on the central vnet!!  
+  # WARNING: This allows the identity to execute a pre-built task using `az acr task run`
   permissions {
     actions = [
-      "Microsoft.ContainerRegistry/registries/taskruns/read",
-      "Microsoft.ContainerRegistry/registries/taskruns/write"
+      # "Microsoft.ContainerRegistry/registries/taskruns/read",
+      "Microsoft.ContainerRegistry/registries/tasks/write",
+      "*/read",
+      "Microsoft.ContainerRegistry/registries/listBuildSourceUploadUrl/action",
+      "Microsoft.ContainerRegistry/registries/tasks/listDetails/action",
+      "Microsoft.ContainerRegistry/registries/scheduleRun/action"
     ]
     data_actions = []
     not_actions = []

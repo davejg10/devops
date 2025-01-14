@@ -65,7 +65,7 @@ resource "azurerm_role_assignment" "dev_nomad_01_assign_acr_perms" {
                  )
                  OR 
                  (
-                  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {7f951dda-4ed3-4680-a7ca-43fe172d538d, 84b3072a-7246-e17b-9140-3bfd6b984736}
+                  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(azurerm_role_definition.run_acr_task.role_definition_id)}, ${basename(data.azurerm_role_definition.acr_pull.role_definition_id)}}
                  )
                 )
                 AND
@@ -75,7 +75,7 @@ resource "azurerm_role_assignment" "dev_nomad_01_assign_acr_perms" {
                  )
                  OR 
                  (
-                  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {84b3072a-7246-e17b-9140-3bfd6b984736, 7f951dda-4ed3-4680-a7ca-43fe172d538d}
+                  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(azurerm_role_definition.run_acr_task.role_definition_id)}, ${basename(data.azurerm_role_definition.acr_pull.role_definition_id)}}
                  )
                 )
                 EOT

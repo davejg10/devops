@@ -15,6 +15,6 @@ curl -fsSL "https://download.oracle.com/java/$VERSION/latest/jdk-${VERSION}_linu
 
 # Add JDK to PATH
 JDK_PROFILE="/etc/profile.d/jdk.sh"
-echo 'export JAVA_HOME=$INSTALL_DIR' >> $JDK_PROFILE
-echo 'export PATH=$INSTALL_DIR/bin:$PATH' >> $JDK_PROFILE
+echo "export JAVA_HOME=$INSTALL_DIR" >> $JDK_PROFILE
+echo "export PATH=$INSTALL_DIR/bin:\$PATH" >> $JDK_PROFILE
 chmod +x $JDK_PROFILE

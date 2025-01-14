@@ -8,6 +8,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: |
-          java -version
+          cat /actions-runner/.env
         name: Execute az cli sample commands
         shell: bash

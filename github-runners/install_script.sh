@@ -4,15 +4,6 @@ TERRAFORM_VERSION="1.10.4"
 MVN_VERSION="3.9.9"
 JDK_VERSION="21"
 
-# Ensure each of /etc/profile.d/*.sh get called on each interactive shell
-cat << 'EOF' >> ~/.bashrc
-for file in /etc/profile.d/*.sh; do
-    if [ -r "$file" ]; then
-        source "$file"
-    fi
-done
-EOF
-
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh
 ./install_terraform.sh $TERRAFORM_VERSION
@@ -31,7 +22,5 @@ for file in /etc/profile.d/*.sh; do
     fi
 done
 
-ls /actions-runner
-cat /actions-runner/env.sh
+# Set github self-hosted runner environment variables
 echo PATH=$PATH >> .env
-cat .env

@@ -33,8 +33,8 @@ resource "azurerm_container_app_job" "github_runners" {
     container {
       name   = "github-runner"
       image  = "${data.terraform_remote_state.devopsutils.outputs.acr_login_server}/github-runners:latest"
-      cpu    = each.cpu
-      memory = each.memory
+      cpu    = each.value.cpu
+      memory = each.value.memory
 
       env {
         name  = "APP_ID"

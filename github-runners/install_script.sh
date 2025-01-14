@@ -32,3 +32,5 @@ for file in /etc/profile.d/*.sh; do
 done
 
 echo PATH=$PATH >> /etc/ephemeral-github-actions-runner.env
+
+cat /etc/ephemeral-github-actions-runner.env

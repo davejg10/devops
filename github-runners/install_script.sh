@@ -36,4 +36,4 @@ echo PATH=$PATH >> /opt/env.sh
 
 echo "in actions/runner"
 ls /actions-runner
-echo PATH=$PATH >> /actions-runner.env.sh
+echo PATH=$PATH >> /actions-runner/env.sh

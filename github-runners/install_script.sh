@@ -23,4 +23,5 @@ for file in /etc/profile.d/*.sh; do
 done
 
 # Set github self-hosted runner environment variables
+# This .env file is the file which github runner source their environment variables from
 echo PATH=$PATH >> .env

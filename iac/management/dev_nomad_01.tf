@@ -50,7 +50,6 @@ resource "azurerm_role_assignment" "dev_nomad_01_vnet_peer" {
   principal_id         = azurerm_user_assigned_identity.dev_nomad_01_tf.principal_id
 }
 
-
 // This ALLOWS the identity to assign the given roles to another identity.
 resource "azurerm_role_assignment" "dev_nomad_01_assign_acr_perms" {
   scope                = data.terraform_remote_state.devopsutils.outputs.acr_id

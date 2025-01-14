@@ -12,6 +12,3 @@ SHELL ["/bin/bash", "-c"]
 
 RUN chmod +x install_script.sh
 RUN ./install_script.sh
-
-RUN source ~/.bashrc
-RUN echo PATH=$PATH >> /etc/ephemeral-github-actions-runner.env

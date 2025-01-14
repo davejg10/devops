@@ -24,3 +24,11 @@ chmod +x install_jdk.sh
 echo "Installing Maven version $MVN_VERSION"
 chmod +x install_mvn.sh
 ./install_mvn.sh $MVN_VERSION
+
+for file in /etc/profile.d/*.sh; do
+    if [ -r "$file" ]; then
+        source "$file"
+    fi
+done
+
+echo PATH=$PATH >> /etc/ephemeral-github-actions-runner.env

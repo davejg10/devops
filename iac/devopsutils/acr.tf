@@ -9,13 +9,13 @@ resource "azurerm_container_registry" "devops" {
 }
 
 locals {
-  create_acr_task_file_name = "create_acr_task.sh"
-  create_acr_task_file_path = "${path.module}/${local.create_acr_task_file_name}"
+  acr_task_file_path = "${path.module}/acb.yaml"
+  create_acr_task_file_path = "${path.module}/create_acr_task.sh"
 }
 
 // Create a diff so the create task is triggered if any changes occur in either file.
 resource "terraform_data" "create_acr_task_diff" {
-  input = "${filebase64(local.create_acr_task_file_path)},${filebase64(path.module"/acb.yaml")}"
+  input = "${filebase64(local.create_acr_task_file_path)},${filebase64(local.acr_task_file_path)}"
 }
 
 resource "terraform_data" "create_acr_task" {

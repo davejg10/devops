@@ -33,3 +33,6 @@ java -version
 
 echo "Mvn version:"
 mvn -version
+
+ 
+echo PATH=$PATH >> /runnertmp/.env

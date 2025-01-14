@@ -30,10 +30,10 @@ for file in /etc/profile.d/*.sh; do
         source "$file"
     fi
 done
-
+echo "in opt"
 ls /opt/
+echo PATH=$PATH >> /opt/env.sh
+
+echo "in actions/runner"
 ls /actions-runner
-
-echo PATH=$PATH >> /etc/ephemeral-github-actions-runner.env
-
-cat /etc/ephemeral-github-actions-runner.env
+echo PATH=$PATH >> /actions-runner.env.sh

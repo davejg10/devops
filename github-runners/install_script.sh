@@ -25,7 +25,6 @@ echo "Installing Maven version $MVN_VERSION"
 chmod +x install_mvn.sh
 ./install_mvn.sh $MVN_VERSION
 
-
 source ~/.bashrc
 
 echo "Java version:"

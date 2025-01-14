@@ -5,9 +5,6 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-source ~/.bashrc
-java -version
-
 VERSION=$1
 
 VERSION="3.9.9"
@@ -16,19 +13,10 @@ mkdir $INSTALL_DIR
 
 curl -fsSL "http://www.mirrorservice.org/sites/ftp.apache.org/maven/maven-3/$VERSION/binaries/apache-maven-$VERSION-bin.tar.gz" | tar zx --strip-components=1 -C $INSTALL_DIR
 
-cat << EOF > /etc/profile.d/maven.sh
-#!/bin/bash
-export MAVEN_HOME=$INSTALL_DIR
-export M2_HOME=$INSTALL_DIR
-export M2=$INSTALL_DIR/bin
-export PATH=$INSTALL_DIR/bin:$PATH
-EOF
+MAVEN_PROFILE="/etc/profile.d/maven.sh"
+echo 'export MAVEN_HOME=$INSTALL_DIR' >> $MAVEN_PROFILE
+echo 'export M2_HOME=$INSTALL_DIR' >> $MAVEN_PROFILE
+echo 'export M2=$INSTALL_DIR/bin' >> $MAVEN_PROFILE
+echo 'export PATH=$INSTALL_DIR/bin:$PATH' >> $MAVEN_PROFILE
 
-chmod +x /etc/profile.d/maven.sh
-
-# Verify installation using the dot operator for sourcing
-. /etc/profile.d/maven.sh
-mvn -version
-
-echo maven installed to $INSTALL_DIR
-
+chmod +x $MAVEN_PROFILE

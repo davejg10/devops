@@ -4,18 +4,12 @@ TERRAFORM_VERSION="1.10.4"
 MVN_VERSION="3.9.9"
 JDK_VERSION="21"
 
+# Ensure each of /etc/profile.d/*.sh get called on each interactive shell
 cat << 'EOF' >> ~/.bashrc
+echo "in here"
 for file in /etc/profile.d/*.sh; do
     if [ -r "$file" ]; then
-        . "$file"
-    fi
-done
-EOF
-
-cat << 'EOF' >> ~/.bash_profile
-for file in /etc/profile.d/*.sh; do
-    if [ -r "$file" ]; then
-        . "$file"
+        source "$file"
     fi
 done
 EOF

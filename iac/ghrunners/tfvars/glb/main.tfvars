@@ -7,19 +7,19 @@ environment_settings = {
 
 // Name of repos you want the ghrunners to be scaled to.
 container_app_jobs = {
-  "devops" {
+  "devops" = {
     cpu = 0.25
     memory = "0.5Gi"
   }
-  "nomad_infra" {
+  "nomad_infra" = {
     cpu = 0.25
     memory = "0.5Gi"
   }
-  "nomad_backend" {
+  "nomad_backend" = {
     cpu = 2  // Building Java apps requires a bit more juice
     memory = "4Gi"
   }
-  "nomad_app" {
+  "nomad_app" = {
     cpu = 0.25
     memory = "0.5Gi"
   }

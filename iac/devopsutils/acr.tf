@@ -5,21 +5,33 @@ resource "azurerm_container_registry" "devops" {
   location                = var.environment_settings.region
   sku                     = var.acr_sku
   zone_redundancy_enabled = var.acr_zone_redundancy_enabled
-  public_network_access_enabled = var.kv_public_network_access_enabled
+  public_network_access_enabled = var.acr_public_network_access_enabled
+}
+
+locals {
+  acr_task_file_path = "${path.module}/acb.yaml"
+  create_acr_task_file_path = "${path.module}/create_acr_task.sh"
+}
+
+// Create a diff so the create task is triggered if any changes occur in either file.
+resource "terraform_data" "create_acr_task_diff" {
+  input = "${filebase64(local.create_acr_task_file_path)},${filebase64(local.acr_task_file_path)}"
 }
 
 resource "terraform_data" "create_acr_task" {
   triggers_replace = [
     azurerm_container_registry.devops.id,
+    terraform_data.create_acr_task_diff
   ]
 
   provisioner "local-exec" {
-    command = <<CMD
-      TASK_NAME="build_and_push_custom_image"
-      system_identity_principal=$(az acr task create -n $TASK_NAME -r ${azurerm_container_registry.devops.name} -c /dev/null -f acb.yaml --auth-mode None --assign-identity [system] --base-image-trigger-enabled false --query "identity.principalId" -o tsv)
-      az role assignment create --role AcrPush --assignee-object-id $system_identity_principal --assignee-principal-type ServicePrincipal --scope ${azurerm_container_registry.devops.id}
-      az acr task credential add -r ${azurerm_container_registry.devops.name} -n $TASK_NAME --login-server ${azurerm_container_registry.devops.login_server} --use-identity [system]
-    CMD
+    command = "chmod +x ${local.create_acr_task_file_path} && ./${local.create_acr_task_file_path}"
+
+    environment = {
+      ACR_NAME = azurerm_container_registry.devops.name
+      ACR_LOGIN_SERVER = azurerm_container_registry.devops.login_server
+      ACR_ID = azurerm_container_registry.devops.id
+    }
   }
 }
 

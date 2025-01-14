@@ -3,7 +3,7 @@
 // We therefore create a job per repo we want to have the jobs for. 
 resource "azurerm_container_app_job" "github_runners" {
   for_each = {
-    for key in var.container_app_jobs : key => key
+    for key, value in var.container_app_jobs : key => value
   }
 
   name = "aca-${var.environment_settings.environment}-${var.environment_settings.region_code}-${replace(each.key, "_", "-")}"
@@ -21,7 +21,7 @@ resource "azurerm_container_app_job" "github_runners" {
   secret {
     name                = var.github_app_key_secret_name
     identity            = azurerm_user_assigned_identity.container_app_job.id
-    key_vault_secret_id = data.azurerm_key_vault_secret.github_access_token.id
+    key_vault_secret_id = var.github_app_key_secret_id
   }
 
   registry {
@@ -33,8 +33,8 @@ resource "azurerm_container_app_job" "github_runners" {
     container {
       name   = "github-runner"
       image  = "${data.terraform_remote_state.devopsutils.outputs.acr_login_server}/github-runners:latest"
-      cpu    = 0.25
-      memory = "0.5Gi"
+      cpu    = each.value.cpu
+      memory = each.value.memory
 
       env {
         name  = "APP_ID"

@@ -10,7 +10,11 @@ variable "environment_settings" {
 
 // Self-hosted-runners
 variable "container_app_jobs" {
-  type = list(string)
+  type = map(object({
+      cpu = number
+      memory = string
+    })
+  )
   description = "As we are not a github org we have to create a container job for each repo."
 }
 variable "github_organization" {
@@ -21,13 +25,17 @@ variable "project" {
   type    = string
   default = "devops-runners"
 }
-variable "github_app_key_secret_name" {
-  type = string
-}
+
 // The rest are all passed in via cmdline
 variable "github_app_id" {
   type    = string
 }
 variable "github_installation_id" {
+  type = string
+}
+variable "github_app_key_secret_id" {
+  type = string
+}
+variable "github_app_key_secret_name" {
   type = string
 }

@@ -6,14 +6,7 @@ on:
 jobs:
   test:
     runs-on: self-hosted
-
     steps:
-
       - run: |
-          curl -o ips.json https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250106.json
-          jq -r '.values[] | select(.name == "AzureContainerRegistry.UKSouth") | {ip_ranges: .properties.addressPrefixes}' ips.json > uk_south.json
-          jq -r '.values[] | select(.name == "AzureContainerRegistry.UKWest") | .properties.addressPrefixes' ips.json > uk_west.json
-
-          cat uk_south.json
-          cat uk_west.json
+          java -version
         name: Execute az cli sample commands

@@ -14,13 +14,13 @@ private_endpoint_subnet_address_prefixes = "11.0.1.0/26"
 // Azure Container Registry
 acr_sku = "Premium"
 acr_zone_redundancy_enabled = false
-kv_public_network_access_enabled = false
+acr_public_network_access_enabled = false
+
 // Key Vault
 key_vault_sku_name = "standard"
 kv_purge_protection_enabled = "false"
 kv_soft_delete_retention_days = 7
 kv_public_network_access_enabled = false
 
-
-
-
+// LaW
+law_internet_ingestion_enabled = false

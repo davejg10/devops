@@ -30,10 +30,7 @@ for file in /etc/profile.d/*.sh; do
         source "$file"
     fi
 done
-echo "in opt"
-ls /opt/
-echo PATH=$PATH >> /opt/env.sh
 
-echo "in actions/runner"
 ls /actions-runner
+cat /actions-runner/env.sh
 echo PATH=$PATH >> /actions-runner/env.sh

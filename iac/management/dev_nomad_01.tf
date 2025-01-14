@@ -121,9 +121,7 @@ resource "azurerm_federated_identity_credential" "dev_nomad_01_tf" {
   subject             = "repo:${var.github_organisation_target}/${local.dev_nomad_environment_settings.github_repository_name}:environment:${local.dev_nomad_environment_settings.environment}"
 }
 
-resource "github_actions_environment_secret" "dev_nomad_01_azure_client_id" {
-  repository      = local.dev_nomad_environment_settings.github_repository_name
-  environment     = local.dev_nomad_environment_settings.environment
-  secret_name     = "AZURE_CLIENT_ID"
-  plaintext_value = azurerm_user_assigned_identity.dev_nomad_01_tf.client_id
+output "dev_nomad_01_azure_client_id" {
+  value = azurerm_user_assigned_identity.dev_nomad_01_tf.client_id
 }
+

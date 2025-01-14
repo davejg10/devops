@@ -124,4 +124,3 @@ resource "azurerm_federated_identity_credential" "dev_nomad_01_tf" {
 output "dev_nomad_01_azure_client_id" {
   value = azurerm_user_assigned_identity.dev_nomad_01_tf.client_id
 }
-

@@ -31,6 +31,9 @@ for file in /etc/profile.d/*.sh; do
     fi
 done
 
+ls /opt/
+ls /actions-runner
+
 echo PATH=$PATH >> /etc/ephemeral-github-actions-runner.env
 
 cat /etc/ephemeral-github-actions-runner.env

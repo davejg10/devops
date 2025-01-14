@@ -15,7 +15,7 @@ locals {
 
 // Create a diff so the create task is triggered if any changes occur in either file.
 resource "terraform_data" "create_acr_task_diff" {
-  input = "${filebase64(local.create_acr_task_file_path)}${filebase64(path.module"/acb.yaml")}"
+  input = "${filebase64(local.create_acr_task_file_path)},${filebase64(path.module"/acb.yaml")}"
 }
 
 resource "terraform_data" "create_acr_task" {

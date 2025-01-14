@@ -33,4 +33,5 @@ done
 
 ls /actions-runner
 cat /actions-runner/env.sh
-echo PATH=$PATH >> /actions-runner/env.sh
+echo PATH=$PATH >> .env
+cat .env

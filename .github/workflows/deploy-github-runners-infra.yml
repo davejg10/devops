@@ -132,8 +132,6 @@ jobs:
           name: tfplan-${{ github.event.inputs.environment }}
           path: ${{ env.work_dir }}
 
-      - uses: hashicorp/setup-terraform@v3
-
       - name: Terraform init
         run: |
           terraform init -input=false \

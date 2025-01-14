@@ -9,7 +9,8 @@ jobs:
     steps:
       - run: |
           # . /etc/profile.d/jdk.sh
+          cat $PATH
 
-          java -version
+          # java -version
         name: Execute az cli sample commands
         shell: bash

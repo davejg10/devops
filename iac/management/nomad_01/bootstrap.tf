@@ -8,7 +8,7 @@ locals {
     nomad_01 = {
       state_container_name = "nomad-backend"
       rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-${var.environment_settings.identifier}"
-      identity_name        = "nomad"
+      identity_name        = "nomadv2"
     }
   }
 }

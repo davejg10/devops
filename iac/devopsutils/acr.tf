@@ -1,15 +1,15 @@
 resource "azurerm_container_registry" "devops" {
   name = "acr${var.environment_settings.environment}${var.environment_settings.region_code}${var.environment_settings.app_name}"
 
-  resource_group_name     = data.azurerm_resource_group.rg.name
-  location                = var.environment_settings.region
-  sku                     = var.acr_sku
-  zone_redundancy_enabled = var.acr_zone_redundancy_enabled
+  resource_group_name           = data.azurerm_resource_group.rg.name
+  location                      = var.environment_settings.region
+  sku                           = var.acr_sku
+  zone_redundancy_enabled       = var.acr_zone_redundancy_enabled
   public_network_access_enabled = var.acr_public_network_access_enabled
 }
 
 locals {
-  acr_task_file_path = "${path.module}/acb.yaml"
+  acr_task_file_path        = "${path.module}/acb.yaml"
   create_acr_task_file_path = "${path.module}/create_acr_task.sh"
 }
 
@@ -28,9 +28,9 @@ resource "terraform_data" "create_acr_task" {
     command = "chmod +x ${local.create_acr_task_file_path} && ./${local.create_acr_task_file_path}"
 
     environment = {
-      ACR_NAME = azurerm_container_registry.devops.name
+      ACR_NAME         = azurerm_container_registry.devops.name
       ACR_LOGIN_SERVER = azurerm_container_registry.devops.login_server
-      ACR_ID = azurerm_container_registry.devops.id
+      ACR_ID           = azurerm_container_registry.devops.id
     }
   }
 }

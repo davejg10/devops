@@ -46,21 +46,13 @@ jobs:
       - name: Install Terraform
         if: ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform init
-        uses: davejg10/pipeline_templates/.github/actions/terraform_init@feature/terraform_actions
-        with:
-          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
-          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
-          backend_container_name: ${{ github.event.inputs.app_name }}
-          work_dir: ${{ env.work_dir }}
-      
-      - name: Terraform Validate
-        run: terraform validate
-
+  
       - name: Terraform plan
         uses: davejg10/pipeline_templates/.github/actions/terraform_plan@feature/terraform_actions
         with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ vars.backend_container_name }}
           environment: ${{ github.event.inputs.environment }}
           work_dir: ${{ env.work_dir }}
       

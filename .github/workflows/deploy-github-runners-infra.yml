@@ -99,7 +99,7 @@ jobs:
           backend_container_name: ${{ github.event.inputs.app_name }}
           environment: ${{ github.event.inputs.environment }}
           work_dir: ${{ env.work_dir }}
-          additional_tf_vars: -var "github_app_key_secret_id=${{ needs.insert_runner_secret.outputs.SECRET_URI }}'" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
+          additional_tf_vars: -var "github_app_key_secret_id=${{ needs.insert_runner_secret.outputs.SECRET_URI }}" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
       
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}

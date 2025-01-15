@@ -35,8 +35,8 @@ permissions:
   contents: read
 
 jobs:
-  terraform_destroy:
-    runs-on: ubuntu-latest
+  terraform_plan_destroy:
+    runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
@@ -47,25 +47,34 @@ jobs:
       - name: Install Terraform
         if:  ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
+      
+      - name: Terraform plan destroy
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@feature/terraform_actions
+        with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          environment: ${{ github.event.inputs.environment }}
+          work_dir: ${{ env.work_dir }}
 
-      - name: Terraform init
-        run: |
-          terraform init -input=false \
-            -backend-config="resource_group_name=${{ vars.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" \
-            -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ github.event.inputs.app_name }}"
-            
-      - name: Terraform destroy ${{ github.event.inputs.app_name }}
-        if: ${{ github.event.inputs.app_name }} == ghrunners
-        run: |
-          terraform destroy -auto-approve \
-            -var "github_app_key_secret_name=github-app-key" \
-            -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" \
-            -var "github_app_id=${{ vars.GH_APP_ID }}" \
-            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars"
+  terraform_apply:
+    runs-on: ${{ github.event.inputs.runners }}
+    environment: ${{ github.event.inputs.environment }}
+    needs: terraform_plan
+    defaults:
+      run:
+        working-directory: ${{ env.work_dir }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform destroy
-        if: ${{ github.event.inputs.app_name }} == devopsutils
-        run: |
-          terraform destroy -auto-approve \
-            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars"
+      - name: Terraform apply
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@feature/terraform_actions
+        with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          work_dir: ${{ env.work_dir }}

@@ -52,7 +52,7 @@ jobs:
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
-          backend_container_name: ${{ vars.backend_container_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
           work_dir: ${{ env.work_dir }}
       
       - name: Terraform Validate

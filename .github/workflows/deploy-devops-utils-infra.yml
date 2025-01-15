@@ -48,7 +48,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform init
-        uses: davejg10/pipeline_templates/actions/terraform_init@main
+        uses: davejg10/pipeline_templates/.github/actions/terraform_init@main
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
@@ -59,7 +59,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform plan
-        uses: davejg10/pipeline_templates/actions/terraform_plan@main
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan@main
         with:
           environment: ${{ github.event.inputs.environment }}
           work_dir: ${{ env.work_dir }}
@@ -86,7 +86,7 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform apply
-        uses: davejg10/pipeline_templates/actions/terraform_apply@main
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@main
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}

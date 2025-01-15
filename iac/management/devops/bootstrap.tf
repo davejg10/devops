@@ -7,12 +7,12 @@ locals {
     devopsutils = {
       state_container_name = "devopsutils"
       rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-devopsutils"
-      identity_name        = "devopsv2"
+      identity_name        = "devops"
     }
     ghrunners = {
       state_container_name = "ghrunners"
       rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-ghrunners"
-      identity_name        = "devopsv2"
+      identity_name        = "devops"
     }
   }
 }

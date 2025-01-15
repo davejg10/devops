@@ -4,9 +4,9 @@ run-name: Build & Push ${{ github.event.inputs.dockerfile_dir }} to ACR
 on:
   workflow_dispatch:
     inputs:
-      dockerfile_dir:
+      image_name:
         type: choice
-        description: Dockerfile dir
+        description: Image name
         options: 
           - github-runners
       runners:
@@ -31,7 +31,7 @@ jobs:
     environment: glb
     defaults:
       run:
-        working-directory: ./${{ github.event.inputs.dockerfile_dir }}
+        working-directory: ./images/${{ github.event.inputs.image_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +42,7 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build ${{ github.event.inputs.dockerfile_dir }} (in ACR)
+      - name: Build ${{ github.event.inputs.image_name }} (in ACR)
         run: |
           # This utilizes the acr task created in ../iac/devopsutils/create_acr_task.yaml
-          az acr task run -r $ACR_NAME -n build_and_push_image --set image_name=${{ github.event.inputs.dockerfile_dir }} --set dockerfile=Dockerfile -c .
+          az acr task run -r $ACR_NAME -n build_and_push_image --set image_name=${{ github.event.inputs.image_name }} --set dockerfile=Dockerfile -c .

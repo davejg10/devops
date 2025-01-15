@@ -60,7 +60,7 @@ jobs:
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
-    needs: terraform_plan
+    needs: terraform_plan_destroy
     defaults:
       run:
         working-directory: ${{ env.work_dir }}

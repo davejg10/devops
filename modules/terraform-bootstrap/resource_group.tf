@@ -8,10 +8,3 @@ resource "azurerm_resource_group" "apps" {
   name     = each.value.rg_name
   location = var.environment_settings.region
 }
-
-resource "azurerm_management_lock" "terraform_rg" {
-  name       = "DontDelete"
-  scope      = azurerm_resource_group.terraform.id
-  lock_level = "CanNotDelete"
-  notes      = "This Resource Group should not be deleted"
-}

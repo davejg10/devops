@@ -42,17 +42,13 @@ jobs:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Terraform
-        if: ${{ github.event.inputs.runners != 'self-hosted' }}
-        uses: hashicorp/setup-terraform@v3
   
       - name: Terraform plan
         uses: davejg10/pipeline_templates/.github/actions/terraform_plan@feature/terraform_actions
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
-          backend_container_name: ${{ vars.backend_container_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
           environment: ${{ github.event.inputs.environment }}
           work_dir: ${{ env.work_dir }}
       
@@ -66,10 +62,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Terraform
-        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
-        uses: hashicorp/setup-terraform@v3
-
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
@@ -82,7 +74,7 @@ jobs:
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
-          backend_container_name: ${{ vars.backend_container_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
           work_dir: ${{ env.work_dir }}
 
      

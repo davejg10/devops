@@ -80,6 +80,7 @@ jobs:
 
 
   terraform_plan:
+    needs: insert_runner_secret
     runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     defaults:

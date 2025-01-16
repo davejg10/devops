@@ -13,15 +13,7 @@ on:
         type: choice
         description: Application name
         options: 
-          - devopsutils
           - ghrunners
-      runners:
-        type: choice
-        description: Github runner type
-        default: self-hosted
-        options: 
-          - ubuntu-latest
-          - self-hosted
 
 env:
  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -35,8 +27,45 @@ permissions:
   contents: read
 
 jobs:
-  terraform_plan_destroy:
+  insert_runner_secret: 
     runs-on: ${{ github.event.inputs.runners }}
+    environment: ${{ github.event.inputs.environment }}
+    outputs:
+      SECRET_URI: ${{ steps.insert_secret.outputs.SECRET_URI }}
+    steps:
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Make Key Vault public
+        run: |
+          # Insert the secret into the Key Vault
+          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Enabled
+
+          echo "Verifying public access..."
+          while true; do
+              PUBLIC_ACCESS=$(az keyvault show --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --query "properties.publicNetworkAccess" -o tsv)
+
+              if [[ "$PUBLIC_ACCESS" == "Enabled" ]]; then
+                  echo "Key Vault is now public."
+                  break
+              else
+                  echo "Key Vault is not yet public. Retrying in 5 seconds..."
+                  sleep 5
+              fi
+          done
+
+      - name: Get secret URI a secret in Azure Key Vault
+        id: insert_secret
+        run: |
+          SECRET_URI=$(az keyvault secret show --vault-name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --name "${{ env.GITHUB_APP_SECRET_NAME }}" --query "id" -o tsv)
+          echo "SECRET_URI=$SECRET_URI" >> $GITHUB_OUTPUT
+          
+  terraform_plan_destroy:
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
@@ -45,21 +74,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Terraform
-        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform plan destroy
-        if: ${{ github.event.inputs.app_name == 'devopsutils' }}
-        uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@feature/terraform_actions
-        with:
-          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
-          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
-          backend_container_name: ${{ github.event.inputs.app_name }}
-          environment: ${{ github.event.inputs.environment }}
-          work_dir: ${{ env.work_dir }}
-
-      - name: Terraform plan destroy
-        if: ${{ github.event.inputs.app_name == 'ghrunners' }}
         uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@feature/terraform_actions
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
@@ -70,7 +87,7 @@ jobs:
           additional_tf_vars: -var "github_app_key_secret_id=${{ needs.insert_runner_secret.outputs.SECRET_URI }}" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
 
   terraform_apply:
-    runs-on: ${{ github.event.inputs.runners }}
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     needs: terraform_plan_destroy
     defaults:
@@ -80,7 +97,6 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install Terraform
-        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform apply

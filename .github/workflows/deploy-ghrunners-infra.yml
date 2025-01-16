@@ -91,6 +91,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
+
       - name: Terraform plan
         uses: davejg10/pipeline_templates/.github/actions/terraform_plan@v1
         with:
@@ -110,6 +114,10 @@ jobs:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform apply
         uses: davejg10/pipeline_templates/.github/actions/terraform_apply@v1

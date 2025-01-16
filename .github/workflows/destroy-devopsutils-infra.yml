@@ -1,0 +1,71 @@
+name: terraform-destroy
+run-name: Terraform destroy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment
+        options: 
+          - glb
+      app_name:
+        type: choice
+        description: Application name
+        options: 
+          - devopsutils
+
+env:
+ ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+ ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+ ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+ ARM_USE_AZUREAD: true
+ work_dir: ./iac/${{ github.event.inputs.app_name }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform_plan_destroy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    defaults:
+      run:
+        working-directory: ${{ env.work_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform plan destroy
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@feature/terraform_actions
+        with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          environment: ${{ github.event.inputs.environment }}
+          work_dir: ${{ env.work_dir }}
+
+  terraform_apply:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    needs: terraform_plan_destroy
+    defaults:
+      run:
+        working-directory: ${{ env.work_dir }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform apply
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@feature/terraform_actions
+        with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          work_dir: ${{ env.work_dir }}

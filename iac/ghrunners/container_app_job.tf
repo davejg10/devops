@@ -79,7 +79,7 @@ resource "azurerm_container_app_job" "github_runners" {
         metadata = {
           "owner"          = var.github_organization
           "runnerScope"    = "repo"
-          "repos" = each.key
+          "repos"          = each.key
           "applicationID"  = var.github_app_id
           "installationID" = var.github_installation_id
         }

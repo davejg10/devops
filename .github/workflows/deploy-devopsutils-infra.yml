@@ -42,33 +42,19 @@ jobs:
         working-directory: ${{ env.work_dir }}
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install Terraform
-        if: ${{ github.event.inputs.runners != 'self-hosted' }}
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform init
-        run: |
-          terraform init -input=false \
-            -backend-config="resource_group_name=${{ vars.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" \
-            -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ github.event.inputs.app_name }}"
-      
-      - name: Terraform Validate
-        run: terraform validate
-
       - name: Terraform plan
-        id: terraform_plan
-        run: |
-          terraform plan -input=false \
-            -var-file="tfvars/${{ github.event.inputs.environment }}/main.tfvars" \
-            -out ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
-      
-      - name: Publish Terraform Plan
-        uses: actions/upload-artifact@v4
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan@feature/terraform_actions
         with:
-          name: tfplan-${{ github.event.inputs.environment }}
-          path: ${{ env.work_dir }}/${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          environment: ${{ github.event.inputs.environment }}
+          work_dir: ${{ env.work_dir }}
       
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}
@@ -80,28 +66,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Terraform
-        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
-        uses: hashicorp/setup-terraform@v3
-
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: tfplan-${{ github.event.inputs.environment }}
-          path: ${{ env.work_dir }}
-
-      - name: Terraform init
-        run: |
-          terraform init -input=false \
-            -backend-config="resource_group_name=${{ vars.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" \
-            -backend-config="storage_account_name=${{ vars.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ github.event.inputs.app_name }}"
+      
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform apply
-        run: terraform apply -lock-timeout=300s ${{ github.run_number }}-${{ github.event.inputs.environment }}.tfplan
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@feature/terraform_actions
+        with:
+          backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
+          backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
+          backend_container_name: ${{ github.event.inputs.app_name }}
+          work_dir: ${{ env.work_dir }}
+
+     

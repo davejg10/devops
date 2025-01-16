@@ -53,7 +53,7 @@ jobs:
       
       - name: Make Key Vault public
         if: ${{ github.event.inputs.runners }} != 'self-hosted'
-        run: bash ./.github/scripts/make_keyvault_public.sh
+        run: bash ./.github/scripts/make_keyvault_public.sh ${{ env.DEVOPS_KEY_VAULT_NAME }}
 
       - name: Create a secret in Azure Key Vault
         id: insert_secret
@@ -64,7 +64,7 @@ jobs:
           
       - name: Make Key Vault private
         if: always() && ${{ github.event.inputs.runners }} != 'self-hosted'
-        run: bash ./.github/scripts/make_keyvault_private.sh
+        run: bash ./.github/scripts/make_keyvault_private.sh ${{ env.DEVOPS_KEY_VAULT_NAME }}
 
   terraform_plan:
     needs: insert_runner_secret

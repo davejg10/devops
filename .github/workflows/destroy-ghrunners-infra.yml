@@ -45,7 +45,7 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       
       - name: Make Key Vault public
-        run: bash ./.github/scripts/make_keyvault_public.sh
+        run: bash ./.github/scripts/make_keyvault_public.sh ${{ env.DEVOPS_KEY_VAULT_NAME }}
 
       - name: Get secret URI a secret in Azure Key Vault
         id: insert_secret

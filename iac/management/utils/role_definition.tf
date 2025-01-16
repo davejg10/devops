@@ -19,12 +19,12 @@ resource "azurerm_role_definition" "vnet_peer" {
 resource "azurerm_role_definition" "run_acr_task" {
   name        = "acr-task-run"
   scope       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
-  description = "A custom role that allows an identity to run a pre-made ACR task."
+  description = "A custom role that allows an identity to build & push & import an image to ACR using quick tasks."
 
   # This allows the identity to execute a pre-built task using `az acr task run`
   permissions {
     actions = [
-      # "Microsoft.ContainerRegistry/registries/buildTasks/write"
+      "Microsoft.ContainerRegistry/registries/importImage/action",
       "Microsoft.ContainerRegistry/registries/runs/listLogSasUrl/action",
       "Microsoft.ContainerRegistry/registries/tasks/write",
       "*/read",

@@ -35,6 +35,8 @@ jobs:
     outputs:
       SECRET_URI: ${{ steps.insert_secret.outputs.SECRET_URI }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
@@ -43,7 +45,7 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       
       - name: Make Key Vault public
-        run:  ../scripts/make_keyvault_public.sh
+        run:  ./.github/scripts/make_keyvault_public.sh
 
       - name: Get secret URI a secret in Azure Key Vault
         id: insert_secret

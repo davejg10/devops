@@ -27,6 +27,6 @@ module "terraform_bootstrap" {
   github_organisation_target = local.github_organisation_target
 }
 
-output "terraform_client_ids" {
-  value = module.terraform_bootstrap.terraform_client_ids
+output "terraform_identity_ids" {
+  value = module.terraform_bootstrap.terraform_identity_ids
 }

@@ -1,7 +1,7 @@
 resource "azurerm_role_assignment" "devopsutils_vnet_peer" {
   scope              = data.azurerm_virtual_network.devopsutils.id
   role_definition_id = data.azurerm_role_definition.devopsutils_vnet_peer.id
-  principal_id       = module.terraform_bootstrap.terraform_client_ids["nomad"].principal_id
+  principal_id       = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   principal_type     = "ServicePrincipal"
 }
 
@@ -9,7 +9,7 @@ resource "azurerm_role_assignment" "devopsutils_vnet_peer" {
 resource "azurerm_role_assignment" "assign_acr_perms" {
   scope                = data.azurerm_container_registry.devopsutils.id
   role_definition_name = "Role Based Access Control Administrator"
-  principal_id         = module.terraform_bootstrap.terraform_client_ids["nomad"].principal_id
+  principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   condition_version    = "2.0"
   principal_type     = "ServicePrincipal"
 
@@ -39,7 +39,7 @@ resource "azurerm_role_assignment" "assign_acr_perms" {
 resource "azurerm_role_assignment" "devopsutils_rg_reader" {
   scope                = data.azurerm_resource_group.devopsutils.id
   role_definition_name = "Reader"
-  principal_id         = module.terraform_bootstrap.terraform_client_ids["nomad"].principal_id
+  principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   principal_type     = "ServicePrincipal"
 }
 
@@ -47,6 +47,6 @@ resource "azurerm_role_assignment" "devopsutils_rg_reader" {
 resource "azurerm_role_assignment" "dns_contributor" {
   scope                = data.azurerm_resource_group.devopsutils.id
   role_definition_name = "Private DNS Zone Contributor"
-  principal_id         = module.terraform_bootstrap.terraform_client_ids["nomad"].principal_id
+  principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   principal_type     = "ServicePrincipal"
 }

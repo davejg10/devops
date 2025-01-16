@@ -1,4 +1,4 @@
-name: deploy-githubrunners-infra
+name: deploy-ghrunners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
@@ -42,6 +42,8 @@ jobs:
     outputs:
       SECRET_URI: ${{ steps.insert_secret.outputs.SECRET_URI }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
@@ -51,22 +53,7 @@ jobs:
       
       - name: Make Key Vault public
         if: ${{ github.event.inputs.runners }} != 'self-hosted'
-        run: |
-          # Insert the secret into the Key Vault
-          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Enabled
-
-          echo "Verifying public access..."
-          while true; do
-              PUBLIC_ACCESS=$(az keyvault show --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --query "properties.publicNetworkAccess" -o tsv)
-
-              if [[ "$PUBLIC_ACCESS" == "Enabled" ]]; then
-                  echo "Key Vault is now public."
-                  break
-              else
-                  echo "Key Vault is not yet public. Retrying in 5 seconds..."
-                  sleep 5
-              fi
-          done
+        run: bash ./.github/scripts/make_keyvault_public.sh ${{ env.DEVOPS_KEY_VAULT_NAME }}
 
       - name: Create a secret in Azure Key Vault
         id: insert_secret
@@ -77,9 +64,7 @@ jobs:
           
       - name: Make Key Vault private
         if: always() && ${{ github.event.inputs.runners }} != 'self-hosted'
-        run: |
-          echo "Changing network access of ${{ env.DEVOPS_KEY_VAULT_NAME }} to private"
-          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Disabled
+        run: bash ./.github/scripts/make_keyvault_private.sh ${{ env.DEVOPS_KEY_VAULT_NAME }}
 
   terraform_plan:
     needs: insert_runner_secret
@@ -91,8 +76,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
+
       - name: Terraform plan
-        uses: davejg10/pipeline_templates/.github/actions/terraform_plan@feature/terraform_actions
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan@v1
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
@@ -111,8 +100,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Terraform
+        if:  ${{ github.event.inputs.runners != 'self-hosted' }}
+        uses: hashicorp/setup-terraform@v3
+
       - name: Terraform apply
-        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@feature/terraform_actions
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@v1
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}

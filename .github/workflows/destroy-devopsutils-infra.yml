@@ -1,4 +1,4 @@
-name: terraform-destroy
+name: destroy-devopsutils-infra
 run-name: Terraform destroy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
@@ -40,7 +40,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform plan destroy
-        uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@feature/terraform_actions
+        uses: davejg10/pipeline_templates/.github/actions/terraform_plan_destroy@v1
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
@@ -63,7 +63,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform apply
-        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@feature/terraform_actions
+        uses: davejg10/pipeline_templates/.github/actions/terraform_apply@v1
         with:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}

@@ -1,4 +1,4 @@
-name: terraform-destroy
+name: destroy-ghrunners-infra
 run-name: Terraform destroy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
@@ -27,7 +27,7 @@ permissions:
   contents: read
 
 jobs:
-  insert_runner_secret: 
+  fetch_runner_secret: 
     runs-on: ${{ github.event.inputs.runners }}
     environment: ${{ github.event.inputs.environment }}
     outputs:
@@ -65,6 +65,7 @@ jobs:
           echo "SECRET_URI=$SECRET_URI" >> $GITHUB_OUTPUT
           
   terraform_plan_destroy:
+    needs: fetch_runner_secret 
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     defaults:
@@ -84,7 +85,7 @@ jobs:
           backend_container_name: ${{ github.event.inputs.app_name }}
           environment: ${{ github.event.inputs.environment }}
           work_dir: ${{ env.work_dir }}
-          additional_tf_vars: -var "github_app_key_secret_id=${{ needs.insert_runner_secret.outputs.SECRET_URI }}" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
+          additional_tf_vars: -var "github_app_key_secret_id=${{ needs.fetch_runner_secret.outputs.SECRET_URI }}" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
 
   terraform_apply:
     runs-on: ubuntu-latest

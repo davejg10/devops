@@ -1,4 +1,4 @@
-name: terraform-destroy
+name: destroy-devopsutils-infra
 run-name: Terraform destroy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:

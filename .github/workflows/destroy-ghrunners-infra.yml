@@ -28,7 +28,7 @@ permissions:
 
 jobs:
   fetch_runner_secret: 
-    runs-on: ${{ github.event.inputs.runners }}
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     outputs:
       SECRET_URI: ${{ steps.insert_secret.outputs.SECRET_URI }}

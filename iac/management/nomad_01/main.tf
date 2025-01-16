@@ -1,6 +1,5 @@
 terraform {
   backend "azurerm" {
-    key                  = "nomad-01.tfstate"
     resource_group_name  = "rg-glb-uks-management"
     storage_account_name = "stglbuksmanagement"
     container_name       = "management"

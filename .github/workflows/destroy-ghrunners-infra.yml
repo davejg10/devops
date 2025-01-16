@@ -43,22 +43,7 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       
       - name: Make Key Vault public
-        run: |
-          # Insert the secret into the Key Vault
-          az keyvault update --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --public-network-access Enabled
-
-          echo "Verifying public access..."
-          while true; do
-              PUBLIC_ACCESS=$(az keyvault show --name "${{ env.DEVOPS_KEY_VAULT_NAME }}" --query "properties.publicNetworkAccess" -o tsv)
-
-              if [[ "$PUBLIC_ACCESS" == "Enabled" ]]; then
-                  echo "Key Vault is now public."
-                  break
-              else
-                  echo "Key Vault is not yet public. Retrying in 5 seconds..."
-                  sleep 5
-              fi
-          done
+        run:  ../scripts/make_keyvault_public.sh
 
       - name: Get secret URI a secret in Azure Key Vault
         id: insert_secret

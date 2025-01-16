@@ -24,6 +24,7 @@ resource "azurerm_role_definition" "run_acr_task" {
   # This allows the identity to execute a pre-built task using `az acr task run`
   permissions {
     actions = [
+      # "Microsoft.ContainerRegistry/registries/buildTasks/write"
       "Microsoft.ContainerRegistry/registries/runs/listLogSasUrl/action",
       "Microsoft.ContainerRegistry/registries/tasks/write",
       "*/read",

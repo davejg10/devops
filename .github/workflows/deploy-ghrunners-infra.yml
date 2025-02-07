@@ -28,7 +28,7 @@ env:
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
  work_dir: ./iac/${{ github.event.inputs.app_name }}
- DEVOPS_KEY_VAULT_NAME: kv-glb-uks-devopsutils
+ DEVOPS_KEY_VAULT_NAME: kv-t-glb-uks-devopsutils
  GITHUB_APP_SECRET_NAME: github-app-key
 
 permissions:

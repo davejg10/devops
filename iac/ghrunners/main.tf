@@ -22,7 +22,7 @@ terraform {
 
 provider "azurerm" {
   use_oidc                        = true
-  resource_provider_registrations = "core"
+  resource_provider_registrations = "none"
   subscription_id                 = "73a3c766-6179-4571-acb5-72b4c3b810bb"
 
   resource_providers_to_register = [

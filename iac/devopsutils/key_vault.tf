@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "devops" {
-  name = "kv-tmp-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
+  name = "kv-t-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
 
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = var.environment_settings.region

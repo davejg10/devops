@@ -42,11 +42,30 @@ resource "azurerm_role_assignment" "devopsutils_rg_reader" {
   principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   principal_type     = "ServicePrincipal"
 }
+resource "azurerm_role_assignment" "backup_vault_rg_reader" {
+  scope                = data.azurerm_resource_group.backup_vault.id
+  role_definition_name = "Reader"
+  principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
+  principal_type     = "ServicePrincipal"
+}
+resource "azurerm_role_assignment" "backup_vault_snapshots_rg_reader" {
+  scope                = data.azurerm_resource_group.backup_vault_snapshots.id
+  role_definition_name = "Reader"
+  principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
+  principal_type     = "ServicePrincipal"
+}
 
 // Usually we would use Azure Policy for this rather than having our identity write the A records themselves
 resource "azurerm_role_assignment" "dns_contributor" {
   scope                = data.azurerm_resource_group.devopsutils.id
   role_definition_name = "Private DNS Zone Contributor"
   principal_id         = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
+  principal_type     = "ServicePrincipal"
+}
+
+resource "azurerm_role_assignment" "create_backup_instance_in_vault" {
+  scope              = data.azurerm_data_protection_backup_vault.vault.id
+  role_definition_id = data.azurerm_role_definition.create_backup_instance.id
+  principal_id       = module.terraform_bootstrap.terraform_identity_ids["nomad"].principal_id
   principal_type     = "ServicePrincipal"
 }

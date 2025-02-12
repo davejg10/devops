@@ -4,6 +4,11 @@ TERRAFORM_VERSION="1.10.4"
 MVN_VERSION="3.9.9"
 JDK_VERSION="21"
 
+sudo apt update
+
+echo "Installing dnsutils"
+sudo apt install dnsutils -y
+
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh
 ./install_terraform.sh $TERRAFORM_VERSION

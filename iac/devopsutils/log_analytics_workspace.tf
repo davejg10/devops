@@ -54,9 +54,9 @@ resource "azurerm_log_analytics_workspace" "devops" {
 #   }
 # }
 
-# output "log_analytics_workspace_name" {
-#   value = azurerm_log_analytics_workspace.devops.name
-# }
-# output "log_analytics_workspace_id" {
-#   value = azurerm_log_analytics_workspace.devops.id
-# }
+output "log_analytics_workspace_name" {
+  value = azurerm_log_analytics_workspace.devops.name
+}
+output "log_analytics_workspace_id" {
+  value = azurerm_log_analytics_workspace.devops.id
+}

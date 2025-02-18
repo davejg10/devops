@@ -2,6 +2,8 @@ name: deploy-ghrunners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
+  schedule:
+    - cron: "0 23 * * *"  # Runs every day at 11 PM UTC. Scales the container apps down to 0 for cost savings
   workflow_dispatch:
     inputs:
       environment:

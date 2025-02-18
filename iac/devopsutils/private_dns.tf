@@ -2,10 +2,10 @@ locals {
   private_dns_zones = {
     "vaultcore" = "privatelink.vaultcore.azure.net"
     "blob"      = "privatelink.blob.core.windows.net",
-    "monitor1"  = "privatelink.agentsvc.azure-automation.net",
-    "monitor2"  = "privatelink.monitor.azure.com",
-    "monitor3"  = "privatelink.ods.opinsights.azure.com",
-    "monitor4"  = "privatelink.oms.opinsights.azure.com",
+    # "monitor1"  = "privatelink.agentsvc.azure-automation.net", // Commented for now; see log_analytics_workspace.tf
+    # "monitor2"  = "privatelink.monitor.azure.com",
+    # "monitor3"  = "privatelink.ods.opinsights.azure.com",
+    # "monitor4"  = "privatelink.oms.opinsights.azure.com",
   }
 }
 

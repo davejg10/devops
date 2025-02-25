@@ -4,6 +4,12 @@ resource "azurerm_subnet" "ghrunner" {
   virtual_network_name = azurerm_virtual_network.devops.name
   address_prefixes     = [var.ghrunner_subnet_address_prefixes]
 
+  service_endpoints = [
+    "Microsoft.Storage",
+    "Microsoft.KeyVault",
+    "Microsoft.Sql"
+  ]
+
   delegation {
     name = "containerapp-delegation"
 
@@ -32,4 +38,7 @@ output "ghrunner_subnet_name" {
 }
 output "ghrunner_subnet_id" {
   value = azurerm_subnet.ghrunner.id
+}
+output "ghrunner_subnet_address_prefix" {
+  value = azurerm_subnet.ghrunner.address_prefixes[0]
 }

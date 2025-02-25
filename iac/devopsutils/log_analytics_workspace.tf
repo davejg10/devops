@@ -7,6 +7,7 @@ resource "azurerm_log_analytics_workspace" "devops" {
   sku                        = "PerGB2018"
   retention_in_days          = 30
   internet_ingestion_enabled = var.law_internet_ingestion_enabled
+  daily_quota_gb = var.law_daily_quota_gb
 }
 
 // The commented code creates a Azure Monitor Private Link Scope which is used to send all monitor traffic through Azure backbone.

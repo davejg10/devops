@@ -3,5 +3,4 @@ environment_settings = {
   region_code = "uks"
   environment = "test"
   app_name    = "nomad"
-  identifier  = "01"
 }

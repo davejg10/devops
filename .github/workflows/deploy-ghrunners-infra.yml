@@ -2,8 +2,6 @@ name: deploy-ghrunners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
-  schedule:
-    - cron: "0 23 * * *"  # Runs every day at 11 PM UTC. Scales the container apps down to 0 for cost savings
   workflow_dispatch:
     inputs:
       environment:
@@ -29,7 +27,7 @@ env:
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac/${{ github.event.inputs.app_name }}
+ WORK_DIR: ./iac/${{ github.event.inputs.app_name }}
  DEVOPS_KEY_VAULT_NAME: kv-t-glb-uks-devopsutils
  GITHUB_APP_SECRET_NAME: github-app-key
 
@@ -74,7 +72,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}
+        working-directory: ${{ env.WORK_DIR }}
     steps:
       - uses: actions/checkout@v4
 

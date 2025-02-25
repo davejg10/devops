@@ -54,3 +54,7 @@ variable "kv_public_network_access_enabled" {
 variable "law_internet_ingestion_enabled" {
   type = bool
 }
+
+variable "law_daily_quota_gb" {
+  type = number
+}

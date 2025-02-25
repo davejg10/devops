@@ -2,8 +2,6 @@ name: deploy-ghrunners-infra
 run-name: Terraform deploy ${{ github.event.inputs.app_name }} in ${{ github.event.inputs.environment }}
 
 on:
-  schedule:
-    - cron: "0 23 * * *"  # Runs every day at 11 PM UTC. Scales the container apps down to 0 for cost savings
   workflow_dispatch:
     inputs:
       environment:
@@ -29,7 +27,7 @@ env:
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac/${{ github.event.inputs.app_name }}
+ WORK_DIR: ./iac/${{ github.event.inputs.app_name }}
  DEVOPS_KEY_VAULT_NAME: kv-t-glb-uks-devopsutils
  GITHUB_APP_SECRET_NAME: github-app-key
 
@@ -74,7 +72,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}
+        working-directory: ${{ env.WORK_DIR }}
     steps:
       - uses: actions/checkout@v4
 
@@ -89,7 +87,7 @@ jobs:
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
           backend_container_name: ${{ github.event.inputs.app_name }}
           environment: ${{ github.event.inputs.environment }}
-          work_dir: ${{ env.work_dir }}
+          WORK_DIR: ${{ env.WORK_DIR }}
           additional_tf_vars: -var "github_app_key_secret_id=${{ needs.insert_runner_secret.outputs.SECRET_URI }}" -var "github_app_key_secret_name=${{ env.GITHUB_APP_SECRET_NAME }}" -var "github_installation_id=${{ vars.GH_INSTALLATION_ID }}" -var "github_app_id=${{ vars.GH_APP_ID }}"
       
   terraform_apply:
@@ -98,7 +96,7 @@ jobs:
     needs: terraform_plan
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}
+        working-directory: ${{ env.WORK_DIR }}
     steps:
       - uses: actions/checkout@v4
 
@@ -112,4 +110,4 @@ jobs:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
           backend_container_name: ${{ github.event.inputs.app_name }}
-          work_dir: ${{ env.work_dir }}
+          WORK_DIR: ${{ env.WORK_DIR }}

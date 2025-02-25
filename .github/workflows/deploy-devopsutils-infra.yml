@@ -27,7 +27,7 @@ env:
  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
  ARM_USE_AZUREAD: true
- work_dir: ./iac/${{ github.event.inputs.app_name }}
+ WORK_DIR: ./iac/${{ github.event.inputs.app_name }}
 
 permissions:
   id-token: write
@@ -39,7 +39,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}
+        working-directory: ${{ env.WORK_DIR }}
     steps:
       - uses: actions/checkout@v4
       
@@ -54,7 +54,7 @@ jobs:
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
           backend_container_name: ${{ github.event.inputs.app_name }}
           environment: ${{ github.event.inputs.environment }}
-          work_dir: ${{ env.work_dir }}
+          WORK_DIR: ${{ env.WORK_DIR }}
       
   terraform_apply:
     runs-on: ${{ github.event.inputs.runners }}
@@ -62,7 +62,7 @@ jobs:
     needs: terraform_plan
     defaults:
       run:
-        working-directory: ${{ env.work_dir }}
+        working-directory: ${{ env.WORK_DIR }}
     steps:
       - uses: actions/checkout@v4
 
@@ -83,6 +83,6 @@ jobs:
           backend_azure_resource_group_name: ${{ vars.backend_azure_resource_group_name }}
           backend_azure_storage_account_name: ${{ vars.backend_azure_storage_account_name }}
           backend_container_name: ${{ github.event.inputs.app_name }}
-          work_dir: ${{ env.work_dir }}
+          WORK_DIR: ${{ env.WORK_DIR }}
 
      

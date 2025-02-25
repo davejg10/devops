@@ -23,4 +23,5 @@ kv_soft_delete_retention_days    = 7
 kv_public_network_access_enabled = false
 
 // LaW
-law_internet_ingestion_enabled = false
+law_internet_ingestion_enabled = true
+law_daily_quota_gb = 0.5

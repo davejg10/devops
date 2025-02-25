@@ -5,4 +5,4 @@ environment_settings = {
   app_name    = "backup"
 }
 
-soft_delete = "On"
+soft_delete = "Off"

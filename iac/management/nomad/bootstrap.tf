@@ -5,9 +5,16 @@ locals {
   github_environment         = var.environment_settings.environment
 
   app_config = {
+    // Hosts the actual Web App & Database
     nomad_01 = {
       state_container_name = "nomad-backend"
-      rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-${var.environment_settings.identifier}"
+      rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-01"
+      identity_name        = "nomad"
+    }
+    // Hosts the Function Apps - web scraping
+    nomad_02 = {
+      state_container_name = "nomad-data-services"
+      rg_name              = "rg-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}-02"
       identity_name        = "nomad"
     }
   }

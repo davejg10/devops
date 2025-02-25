@@ -17,7 +17,7 @@ container_app_jobs = {
   }
   "nomad_backend" = {
     cpu    = 2 // Building Java apps requires a bit more juice
-    memory = "4Gi"
+    memory = "2Gi"
   }
   "nomad_app" = {
     cpu    = 0.25

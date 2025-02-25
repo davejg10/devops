@@ -20,7 +20,7 @@ acr_public_network_access_enabled = true
 key_vault_sku_name               = "standard"
 kv_purge_protection_enabled      = "false"
 kv_soft_delete_retention_days    = 7
-kv_public_network_access_enabled = false
+kv_public_network_access_enabled = true // Network ACLS
 
 // LaW
 law_internet_ingestion_enabled = true

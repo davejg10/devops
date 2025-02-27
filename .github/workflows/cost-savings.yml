@@ -19,4 +19,4 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run save_cost.yml script
-        run: bash ./.github/scripts/save_cost.sh ${{ var.AZURE_SUBSCRIPTION_ID }}
+        run: bash ./.github/scripts/save_cost.sh ${{ vars.AZURE_SUBSCRIPTION_ID }}

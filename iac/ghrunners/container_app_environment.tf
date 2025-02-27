@@ -14,5 +14,5 @@ resource "azurerm_container_app_environment" "github_runners" {
   }
 
   internal_load_balancer_enabled = true
-  zone_redundancy_enabled = true
+  zone_redundancy_enabled        = true
 }

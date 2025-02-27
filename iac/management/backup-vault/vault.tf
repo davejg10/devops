@@ -10,11 +10,11 @@ resource "azurerm_resource_group" "snapshots" {
 
 resource "azurerm_data_protection_backup_vault" "vault" {
   name                = "bv-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
-  resource_group_name  = azurerm_resource_group.backup.name
-  location             = azurerm_resource_group.backup.location
+  resource_group_name = azurerm_resource_group.backup.name
+  location            = azurerm_resource_group.backup.location
   datastore_type      = "OperationalStore"
   redundancy          = "ZoneRedundant"
-  soft_delete = var.soft_delete
+  soft_delete         = var.soft_delete
   identity {
     type = "SystemAssigned"
   }

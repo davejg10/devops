@@ -64,3 +64,17 @@ resource "azurerm_role_definition" "create_backup_instance" {
     not_actions  = []
   }
 }
+
+resource "azurerm_role_definition" "link_to_log_analytics_workspace" {
+  name        = "link-resource-to-log-analytics-workspace"
+  scope       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
+  description = "A custom role allow you to fetch the acces keys to a Log Analytics Workspace in order to link a resource to it."
+
+  permissions {
+    actions = [
+      "Microsoft.OperationalInsights/workspaces/sharedKeys/action",
+    ]
+    data_actions = []
+    not_actions  = []
+  }
+}

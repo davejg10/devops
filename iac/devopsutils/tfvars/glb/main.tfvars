@@ -24,4 +24,4 @@ kv_public_network_access_enabled = true // Network ACLS
 
 // LaW
 law_internet_ingestion_enabled = true
-law_daily_quota_gb = 0.5
+law_daily_quota_gb             = 0.5

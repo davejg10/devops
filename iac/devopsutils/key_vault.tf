@@ -14,8 +14,8 @@ resource "azurerm_key_vault" "devops" {
   public_network_access_enabled = var.kv_public_network_access_enabled
 
   network_acls {
-    bypass                     = "AzureServices"
-    default_action             = "Deny"
+    bypass         = "AzureServices"
+    default_action = "Deny"
     virtual_network_subnet_ids = [
       azurerm_subnet.ghrunner.id
     ]

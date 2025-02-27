@@ -9,6 +9,6 @@ variable "environment_settings" {
 }
 
 variable "soft_delete" {
-  type = string
+  type        = string
   description = "The soft delete setting for the backup vault"
 }

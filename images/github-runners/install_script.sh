@@ -9,6 +9,9 @@ sudo apt update
 echo "Installing dnsutils"
 sudo apt install dnsutils -y
 
+echo "Installing psql"
+sudo apt install postgres -y
+
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh
 ./install_terraform.sh $TERRAFORM_VERSION

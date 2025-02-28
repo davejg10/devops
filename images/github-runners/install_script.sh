@@ -4,13 +4,19 @@ TERRAFORM_VERSION="1.10.4"
 MVN_VERSION="3.9.9"
 JDK_VERSION="21"
 
+# Get postgrs repository 
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
 sudo apt update
 
 echo "Installing dnsutils"
 sudo apt install dnsutils -y
 
 echo "Installing psql"
-sudo apt install postgresql-clients -y
+
+
+sudo apt install postgresql-client-16 -y
 
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh

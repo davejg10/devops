@@ -10,7 +10,7 @@ echo "Installing dnsutils"
 sudo apt install dnsutils -y
 
 echo "Installing psql"
-sudo apt install postgres -y
+sudo apt install postgresql-clients -y
 
 echo "Installing Terraform version $TERRAFORM_VERSION"
 chmod +x install_terraform.sh

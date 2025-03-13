@@ -8,5 +8,5 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: |
-          java -version
+          psql
         name: Execute az cli sample commands

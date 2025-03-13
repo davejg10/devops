@@ -9,7 +9,7 @@ environment_settings = {
 vnet_address_space = "11.0.0.0/18"
 
 ghrunner_subnet_address_prefixes         = "11.0.0.0/24"
-private_endpoint_subnet_address_prefixes = "11.0.1.0/26"
+# private_endpoint_subnet_address_prefixes = "11.0.1.0/26"
 
 // Azure Container Registry
 acr_sku                           = "Basic"

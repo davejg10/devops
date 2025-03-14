@@ -12,6 +12,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: glb
     steps:
       - uses: actions/checkout@v4
 

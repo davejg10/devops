@@ -37,8 +37,8 @@ data "azurerm_role_definition" "acr_pull" {
   name  = "AcrPull"
   scope = data.azurerm_container_registry.devopsutils.id
 }
-data "azurerm_role_definition" "acr_task_run" {
-  name  = "acr-task-run"
+data "azurerm_role_definition" "acr_push" {
+  name  = "AcrPush"
   scope = data.azurerm_container_registry.devopsutils.id
 }
 data "azurerm_role_definition" "create_backup_instance" {

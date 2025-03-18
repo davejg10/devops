@@ -20,7 +20,7 @@ resource "azurerm_role_assignment" "devopsutils_acr_perms" {
                  )
                  OR 
                  (
-                  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(data.azurerm_role_definition.acr_task_run.id)}, ${basename(data.azurerm_role_definition.acr_pull.id)}}
+                  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(data.azurerm_role_definition.acr_push.id)}, ${basename(data.azurerm_role_definition.acr_pull.id)}}
                  )
                 )
                 AND
@@ -30,7 +30,7 @@ resource "azurerm_role_assignment" "devopsutils_acr_perms" {
                  )
                  OR 
                  (
-                  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(data.azurerm_role_definition.acr_task_run.id)}, ${basename(data.azurerm_role_definition.acr_pull.id)}}
+                  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${basename(data.azurerm_role_definition.acr_push.id)}, ${basename(data.azurerm_role_definition.acr_pull.id)}}
                  )
                 )
                 EOT

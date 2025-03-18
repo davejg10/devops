@@ -18,7 +18,6 @@ on:
           # - self-hosted
 
 env:
-  ACR_NAME: acrglbuksdevopsutils
   ACR_SERVER_NAME: acrglbuksdevopsutils.azurecr.io
   TAG: ${{ github.run_number }}
 
@@ -42,13 +41,16 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build ${{ github.event.inputs.image_name }} (in ACR)
-        run: |
-          # az acr build actually copies the files to the ACR and its built there...
-          az acr build \
-            --registry ${{ env.ACR_SERVER_NAME }} \
-            --image "${{ github.event.inputs.image_name }}:${{ env.TAG }}" \
-            --build-arg build_version=${{ env.TAG }} .
+      - name: ACR login
+        run: az acr login --name ${{ env.ACR_SERVER_NAME }}
 
-          # Also tag with latest
-          az acr import --name ${{ env.ACR_SERVER_NAME }} --source "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:${{ env.TAG }}" --image ${{ github.event.inputs.image_name }}:latest --force
+      - name: Docker build
+        run: |
+          docker build -t "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:${{ env.TAG }}" .
+          
+          docker tag "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:${{ env.TAG }}" "${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:latest"
+
+      - name: Docker push
+        run: |
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:${{ env.TAG }}
+          docker push ${{ env.ACR_SERVER_NAME }}/${{ github.event.inputs.image_name }}:latest

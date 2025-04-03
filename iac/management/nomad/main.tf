@@ -13,6 +13,9 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=4.14.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+    }
   }
 }
 
@@ -24,4 +27,3 @@ provider "azurerm" {
 }
 
 data "azurerm_client_config" "current" {}
-

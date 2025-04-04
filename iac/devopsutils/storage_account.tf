@@ -18,7 +18,7 @@ resource "azurerm_cdn_profile" "central" {
   name                = "cdn${var.environment_settings.environment}profile"
 
   resource_group_name = data.azurerm_resource_group.rg.name
-  location            = var.environment_settings.region
+  location            = "northeurope"
   sku                 = "Standard_Microsoft"
 }
 

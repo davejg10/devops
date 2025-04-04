@@ -26,7 +26,7 @@ resource "azurerm_cdn_endpoint" "central_blob" {
   name                          = "st-${var.environment_settings.environment}-${var.environment_settings.region_code}-${var.environment_settings.app_name}"
   profile_name                  = azurerm_cdn_profile.central.name
   resource_group_name           = data.azurerm_resource_group.rg.name
-  location                      = var.environment_settings.region
+  location                      = "northeurope"
   origin_host_header            = azurerm_storage_account.central.primary_blob_host
   querystring_caching_behaviour = "IgnoreQueryString"
 
